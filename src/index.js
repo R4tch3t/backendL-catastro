@@ -23,8 +23,12 @@ try {
 }
 
 function setResponseHeaders(res, filename) {
+    try{
     res.header('Content-disposition', 'inline; filename=' + filename);
     res.header('Content-type', 'application/pdf');
+    }catch(e){
+        console.log(e)
+}
 }
 
 function setResponseHeadersJSON(res) {
