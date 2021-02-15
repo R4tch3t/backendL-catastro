@@ -63,7 +63,7 @@ app.get('/orden/:u', function (req, res) {
     
 });
 
-app.get('/expediente/:tp/:CTA/:escritura', function(req, res){
+app.get('/expedientes/:tp/:CTA/:escritura', function(req, res){
     try {
         var filename = "/var/expedientes/" + req.params.tp + "/" + req.params.CTA
         filename += "/" + req.params.escritura
