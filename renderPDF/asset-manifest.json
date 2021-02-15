@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "./static/css/main.59dbe403.chunk.css",
+    "main.js": "./static/js/main.19b442dc.chunk.js",
+    "main.js.map": "./static/js/main.19b442dc.chunk.js.map",
+    "runtime~main.js": "./static/js/runtime~main.de6f6f4f.js",
+    "runtime~main.js.map": "./static/js/runtime~main.de6f6f4f.js.map",
+    "static/css/2.ea4282a7.chunk.css": "./static/css/2.ea4282a7.chunk.css",
+    "static/js/2.08256912.chunk.js": "./static/js/2.08256912.chunk.js",
+    "static/js/2.08256912.chunk.js.map": "./static/js/2.08256912.chunk.js.map",
+    "static/js/3.835854e6.chunk.js": "./static/js/3.835854e6.chunk.js",
+    "static/js/3.835854e6.chunk.js.map": "./static/js/3.835854e6.chunk.js.map",
+    "static/js/4.210c9fba.chunk.js": "./static/js/4.210c9fba.chunk.js",
+    "static/js/4.210c9fba.chunk.js.map": "./static/js/4.210c9fba.chunk.js.map",
+    "static/js/5.a714f7ec.chunk.js": "./static/js/5.a714f7ec.chunk.js",
+    "static/js/5.a714f7ec.chunk.js.map": "./static/js/5.a714f7ec.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.fbc78d8f23c6ecac8f18e606a899b4db.js": "./precache-manifest.fbc78d8f23c6ecac8f18e606a899b4db.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.ea4282a7.chunk.css.map": "./static/css/2.ea4282a7.chunk.css.map",
+    "static/css/main.59dbe403.chunk.css.map": "./static/css/main.59dbe403.chunk.css.map",
+    "static/media/chilapa.png": "./static/media/chilapa.ad6e07fd.png",
+    "static/media/cintillo.jpeg": "./static/media/cintillo.e47f062d.jpeg",
+    "static/media/login.jpg": "./static/media/login.d6390b44.jpg",
+    "static/media/sidebar-1.jpg": "./static/media/sidebar-1.8e9f0a3c.jpg",
+    "static/media/sidebar-2.jpg": "./static/media/sidebar-2.310509c9.jpg",
+    "static/media/sidebar-3.jpg": "./static/media/sidebar-3.25031690.jpg",
+    "static/media/sidebar-4.jpg": "./static/media/sidebar-4.fc9cb053.jpg",
+    "static/media/sidebar-5.jpg": "./static/media/sidebar-5.030cacf4.jpg",
+    "static/media/sidebar-6.jpg": "./static/media/sidebar-6.ad817c9e.jpg"
+  }
+}
