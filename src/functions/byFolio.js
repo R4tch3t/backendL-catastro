@@ -101,7 +101,7 @@ const _byFolio = (req, res) => {
              if(result.length>0){
                 getSubDataNoCTA(result,idOrden,outJSON,res,con)
              }else{
-                getSubData(tp,idOrden,outJSON,res)
+                getSubData(tp,idOrden,con,outJSON,res)
              }
            })
           }else{
