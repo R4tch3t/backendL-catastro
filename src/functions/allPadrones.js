@@ -32,14 +32,14 @@ con.query(sql, (err, result, fields) => {
          
         }
       }
-      subqueryB = ''
+      subqueryB = 'WHERE p.CTA < 500'
       //var subqueryN = ''
       if (inJSON.CTAnombre !== '') {
         if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
-            subqueryB = `WHERE p.CTA=${inJSON.CTAnombre} AND p.CTA<500`
+            subqueryB = `WHERE p.CTA=${inJSON.CTAnombre}`
         }
         if (inJSON.tipoB != undefined && inJSON.tipoB === 1) {
-          subqueryB = `WHERE p.contribuyente LIKE '%${inJSON.CTAnombre}%' AND p.CTA<500`
+          subqueryB = `WHERE p.contribuyente LIKE '%${inJSON.CTAnombre}%'`
         }
       }
     }catch(e){
@@ -71,14 +71,14 @@ const padronU = (req, res) => {
         console.log(`Err on con: ${err}`);
         
       } else {
-        let subqueryB = 'WHERE p.CTA<500'
+        let subqueryB = 'WHERE p.CTA < 500'
         //var subqueryN = ''
         if (inJSON.CTAnombre !== '') {
           if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
-              subqueryB = `WHERE p.CTA=${inJSON.CTAnombre} AND p.CTA<500`
+              subqueryB = `WHERE p.CTA=${inJSON.CTAnombre}`
           }
           if (inJSON.tipoB != undefined && inJSON.tipoB === 1) {
-            subqueryB = `WHERE p.contribuyente LIKE '%${inJSON.CTAnombre}%' AND p.CTA<500`
+            subqueryB = `WHERE p.contribuyente LIKE '%${inJSON.CTAnombre}%'`
           }
         }
         let sql = `SELECT * FROM padronu p ${subqueryB} ORDER by p.CTA ASC`
@@ -138,14 +138,14 @@ const padronU = (req, res) => {
           } else {
 
           }
-          subqueryB = 'WHERE u.CTA=p.CTA AND p.CTA<500'
+          subqueryB = 'WHERE p.CTA < 500 AND u.CTA=p.CTA'
               //var subqueryN = ''
               if (inJSON.CTAnombre !== '') {
                 if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
-                    subqueryB = `WHERE p.CTA=${inJSON.CTAnombre} AND u.CTA=p.CTA AND p.CTA<500`
+                    subqueryB = `WHERE p.CTA=${inJSON.CTAnombre} AND u.CTA=p.CTA`
                 }
                 if (inJSON.tipoB != undefined && inJSON.tipoB === 1) {
-                  subqueryB = `WHERE p.contribuyente LIKE '%${inJSON.CTAnombre}%' AND u.CTA=p.CTA AND p.CTA<500`
+                  subqueryB = `WHERE p.contribuyente LIKE '%${inJSON.CTAnombre}%' AND u.CTA=p.CTA`
                 }
               }
               sql = `SELECT * FROM padronu p, ubiprediou u ${subqueryB} ORDER by p.CTA ASC`
