@@ -79,8 +79,8 @@ const _registrarC = (req, res) => {
 
 const registrarC = (req, res) => {
         try {
-            const {correo} = req.body
-                   if (correo) {
+            const {CTA} = req.body
+                   if (CTA) {
 
                         _registrarC(req, res)
 
