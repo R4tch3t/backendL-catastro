@@ -8,6 +8,7 @@ const setResponse = (res, outJSON, con) => {
         
      };
      try{
+       console.log(outJSON)
         res.send(outJSON);
      }catch(e){
          console.log(e);
