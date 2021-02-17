@@ -48,7 +48,7 @@ getSubData=(tp,idOrden,con,outJSON,res)=>{
                   outJSON.contribuyente = result
                   sql = `SELECT * FROM ubipredio${tp} u `
                   sql += `WHERE u.CTA=${result[0].CTA} ORDER by u.CTA DESC`
-                  //console.log(sql)
+                  console.log(sql)
                   con.query(sql, (err, result, fields) => {
 
                         if (!err) {
@@ -97,6 +97,7 @@ const _byFolio = (req, res) => {
            outJSON.folio = result[0]
            const tp = result[0].tp
            const idOrden = result[0].idOrden
+           outJSON.folio.tp=outJSON.folio.tp[0]
            sql = `SELECT * FROM ordenes o `
            sql += `WHERE o.idOrden=${idOrden} AND o.tp='${tp}' ORDER by o.idOrden DESC`
            con.query(sql, (err, result, fields) => {
