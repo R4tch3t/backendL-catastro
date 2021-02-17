@@ -33,7 +33,7 @@ getSubDataNoCTA=(result,idOrden,outJSON,res,con)=>{
 }
 
 getSubData=(tp,idOrden,con,outJSON,res)=>{
-  let sql = `SELECT * FROM ordenes${tp[0]} o `
+  let sql = `SELECT * FROM ordenes${tp} o `
   sql += `WHERE o.idOrden=${idOrden} ORDER by o.idOrden DESC`
   console.log(sql)
   con.query(sql, (err, result, fields) => {
@@ -103,7 +103,7 @@ const _byFolio = (req, res) => {
              if(result.length>0){
                 getSubDataNoCTA(result,idOrden,outJSON,res,con)
              }else{
-                getSubData(tp,idOrden,con,outJSON,res)
+                getSubData(tp[0],idOrden,con,outJSON,res)
              }
            })
           }else{
