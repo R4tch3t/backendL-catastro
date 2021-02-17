@@ -32,7 +32,7 @@ con.query(sql, (err, result, fields) => {
          
         }
       }
-      subqueryB = 'WHERE p.CTA < 500'
+      subqueryB = 'WHERE p.CTA < 50'
       //var subqueryN = ''
       if (inJSON.CTAnombre !== '') {
         if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
@@ -71,7 +71,7 @@ const padronU = (req, res) => {
         console.log(`Err on con: ${err}`);
         
       } else {
-        let subqueryB = 'WHERE p.CTA < 500'
+        let subqueryB = 'WHERE p.CTA < 50'
         //var subqueryN = ''
         if (inJSON.CTAnombre !== '') {
           if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
@@ -138,7 +138,7 @@ const padronU = (req, res) => {
           } else {
 
           }
-          subqueryB = 'WHERE p.CTA < 500 AND u.CTA=p.CTA'
+          subqueryB = 'WHERE p.CTA < 50 AND u.CTA=p.CTA'
               //var subqueryN = ''
               if (inJSON.CTAnombre !== '') {
                 if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
