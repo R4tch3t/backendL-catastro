@@ -8,7 +8,7 @@ const setResponse = (res, outJSON, con) => {
         
      };
      try{
-       console.log(outJSON)
+       
         res.send(outJSON);
      }catch(e){
          console.log(e);
@@ -36,21 +36,17 @@ getSubDataNoCTA=(result,idOrden,outJSON,res,con)=>{
 getSubData=(tp,idOrden,con,outJSON,res)=>{
   let sql = `SELECT * FROM ordenes${tp} o `
   sql += `WHERE o.idOrden=${idOrden} ORDER by o.idOrden DESC`
-  console.log(sql)
   con.query(sql, (err, result, fields) => {
     if (!err) {
       if (result.length > 0) {
         outJSON.orden = result[0]
         sql = `SELECT * FROM padron${tp} p WHERE p.CTA=${outJSON.orden.CTA} ORDER by p.CTA DESC`
-        console.log(sql)
-        console.log(result)
         con.query(sql, (err, result, fields) => {
               if (!err) {
                 if (result.length > 0) {
                   outJSON.contribuyente = result
                   sql = `SELECT * FROM ubipredio${tp} u `
                   sql += `WHERE u.CTA=${result[0].CTA} ORDER by u.CTA DESC`
-                  console.log(sql)
                   con.query(sql, (err, result, fields) => {
 
                         if (!err) {
