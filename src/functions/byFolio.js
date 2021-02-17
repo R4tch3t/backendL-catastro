@@ -42,6 +42,7 @@ getSubData=(tp,idOrden,con,outJSON,res)=>{
         outJSON.orden = result[0]
         sql = `SELECT * FROM padron${tp} p WHERE p.CTA=${outJSON.orden.CTA} ORDER by p.CTA DESC`
         console.log(sql)
+        console.log(outJSON)
         con.query(sql, (err, result, fields) => {
               if (!err) {
                 if (result.length > 0) {
