@@ -33,8 +33,8 @@ getSubDataNoCTA=(result,idOrden,outJSON,res,con)=>{
 }
 
 getSubData=(tp,idOrden,con,outJSON,res)=>{
-  let sql = `SELECT * FROM ordenes${tp} o `
-  sql += `WHERE o.idOrden=${idOrden[0]} ORDER by o.idOrden DESC`
+  let sql = `SELECT * FROM ordenes${tp[0]} o `
+  sql += `WHERE o.idOrden=${idOrden} ORDER by o.idOrden DESC`
   console.log(sql)
   con.query(sql, (err, result, fields) => {
     if (!err) {
