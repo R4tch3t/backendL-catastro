@@ -78,7 +78,7 @@ registrar = () => {
                                   setResponse()
                                 }
                             })
-                            console.log("1 record inserted");
+                            
                           }
 
                         });
@@ -95,8 +95,6 @@ registrar = () => {
               setResponse()
             }
         })*/
-
-        console.log("Connected!");
 
       }
     });

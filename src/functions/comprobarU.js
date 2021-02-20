@@ -18,7 +18,7 @@ const setResponse = (res, outJSON,con) => {
 }
 
 const _comprobarU = (req, res) => {
-    const {idUsuario, pass} = req.body
+    const {idUsuario, pass, nombre, correo, edad, idRol} = req.body
     let outJSON = {}
     let con = mysql.createConnection({
         host: "localhost",
@@ -37,11 +37,18 @@ const _comprobarU = (req, res) => {
             con.query(sql, (err, result, fields) => {
                 if (!err) {
                     if (result.length > 0) {
-                        if (result[0].pass === pass) {
+                        if (result[0].pass === pass&&!nombre) {
                             outJSON = result
-                        } else {
+                        } else if(!nombre) {
                             outJSON.error.name = 'error01'
-                        }
+                        }else if (result[0].nombre+"" !== nombre+"" || result[0].correo+"" !== correo+"" || result[0].edad+"" !== edad+"" || result[0].idRol+"" !== idRol+"" ) {
+                            console.log(result[0].nombre+" !== "+nombre)
+                            console.log(result[0].correo+" !== "+correo)
+                            console.log(result[0].edad+" !== "+edad)
+                            console.log(result[0].idRol+" !== "+idRol)
+                            outJSON.error.name = 'errorH'
+                            outJSON.rsecury = 1
+                        } 
                     } else {
                         outJSON.error.name = 'error02'
                     }
