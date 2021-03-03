@@ -70,29 +70,13 @@ if (inJSON.dateUp === '') {
     });
 }
 
-const _regO = (req, res) => {
-    //const {CTA, idOrden, dateUp, calle, lote, manzana, tp, numero, colonia, cp, municipio, localidad, m1, m2, bg, zona, tc, total, periodo, otroservicio} = req.body
-    //const inJSON = {CTA, idOrden, dateUp, calle, tp, lote, manzana, numero, colonia, cp, municipio, localidad, m1, m2, bg, zona, tc, total, periodo, otroservicio}
-    const inJSON = req.body
-    let outJSON = {}
-    let con = mysql.createConnection({
-        host: "localhost",
-        user: process.env.NODE_MYSQL_USER,
-        password: process.env.NODE_MYSQL_PASS,
-        database: "dbcatastro"
-    });
-    try {
-      con.connect((err) => {
-        outJSON = {};
-        outJSON.error = {};
-        if (err) {
-          console.log(`Error: ${err}`);
-        } else {
-          let sql = `SELECT * FROM ubipredio${inJSON.tp} WHERE CTA=${inJSON.CTA}`
+const checkUbi = (inJSON, outJSON, res, con) => {
+  let sql = `SELECT * FROM ubipredio${inJSON.tp} WHERE CTA=${inJSON.CTA}`;
           con.query(sql, (err, result, fields) => {
 
             if (!err) {
               if (result.length === 0) {
+
                 sql = `INSERT INTO ubipredio${inJSON.tp} (CTA,calle,lote,manzana,numero,colonia,cp,municipio,localidad) VALUES `
                 sql += `(${inJSON.CTA},'${inJSON.calle}','${inJSON.lote}',`
                 sql += `'${inJSON.manzana}','${inJSON.numero}','${inJSON.colonia}',`
@@ -106,6 +90,7 @@ const _regO = (req, res) => {
 
                   }
                 });
+
               } else {
                 sql = `UPDATE ubipredio${inJSON.tp} SET calle='${inJSON.calle}', lote='${inJSON.lote}', `
                 sql += `manzana='${inJSON.manzana}', numero='${inJSON.numero}', colonia='${inJSON.colonia}', `
@@ -219,7 +204,35 @@ const _regO = (req, res) => {
             }
 
           })
-          console.log("Connected!");
+}
+
+const _regO = (req, res) => {
+    //const {CTA, idOrden, dateUp, calle, lote, manzana, tp, numero, colonia, cp, municipio, localidad, m1, m2, bg, zona, tc, total, periodo, otroservicio} = req.body
+    //const inJSON = {CTA, idOrden, dateUp, calle, tp, lote, manzana, numero, colonia, cp, municipio, localidad, m1, m2, bg, zona, tc, total, periodo, otroservicio}
+    const inJSON = req.body
+    let outJSON = {}
+    let con = mysql.createConnection({
+        host: "localhost",
+        user: process.env.NODE_MYSQL_USER,
+        password: process.env.NODE_MYSQL_PASS,
+        database: "dbcatastro"
+    });
+    try {
+      con.connect((err) => {
+        outJSON = {};
+        outJSON.error = {};
+        if (err) {
+          console.log(`Error: ${err}`);
+        } else {
+          if(inJSON.changeN){
+            let sql = `UPDATE padron${inJSON.tp} SET contribuyente='${inJSON.contribuyente}' WHERE CTA=${inJSON.CTA}`;
+            con.query(sql, (err, result, fields) => {
+              checkUbi(inJSON, outJSON, res, con);
+            });
+          }else{
+            checkUbi(inJSON, outJSON, res, con);
+          }
+          //console.log("Connected!");
 
         }
       });
