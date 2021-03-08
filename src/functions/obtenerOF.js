@@ -33,11 +33,36 @@ const _obtenerOF = (req, res) => {
       outJSON.error = {};
       if (err) {
         console.log(`Error: ${err}`);
-      } else {        
+      } else {
+        let subquery = '';
         let sql = `SELECT * FROM ordenesu o, padronu pa, ubiprediou u WHERE `
-        sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') `
-        sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
+          sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') ${subquery} `
+          sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
+        switch(inJSON.op){
+         case 1: 
+          subquery = " AND o.CTA="+inJSON.CTA
+          sql = `SELECT * FROM ordenesu o, padronu pa, ubiprediou u WHERE `
+          sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') ${subquery} `
+          sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
         
+         break;
+         case 2: 
+          subquery = " AND pa.contribuyente LIKE '%"+inJSON.CTA+"%'"
+          sql = `SELECT * FROM ordenesu o, padronu pa, ubiprediou u WHERE `
+          sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') ${subquery} `
+          sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
+        
+         break;
+         case 3: 
+          subquery = " AND f.idFolio="+inJSON.CTA+" AND o.idOrden=f.idOrden"
+          sql = `SELECT * FROM ordenesu o, padronu pa, ubiprediou u, folios f WHERE `
+          sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') ${subquery} `
+          sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
+        
+         break;
+        }
+        //console.log(sql)
+       // console.log(inJSON)
         con.query(sql, (err, result, fields) => {
           if (!err) {
             if(result.length>0){

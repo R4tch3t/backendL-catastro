@@ -20,13 +20,13 @@ const setResponse = (res, outJSON,con) => {
 insertOrden = (inJSON, outJSON,res, con) => {
 
 if (inJSON.dateUp === '') {
-      sql = `INSERT INTO ordenes${inJSON.tp} (CTA,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs) VALUES `
-      sql += `(${inJSON.CTA},'${inJSON.m1}','${inJSON.m2}',`
+      sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs) VALUES `
+      sql += `(${inJSON.CTA},'${inJSON.contribuyente}','${inJSON.m1}','${inJSON.m2}',`
       sql += `'${inJSON.tc}','${inJSON.zona}','${inJSON.bg}',`
       sql += `'${inJSON.periodo}','${inJSON.total}','${inJSON.idEmpleado}','${inJSON.labelConsta}','${inJSON.otroservicio}','${inJSON.labelCerti}','${inJSON.obs}')`;
     } else {
-      sql = `INSERT INTO ordenes${inJSON.tp} (CTA,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs,dateUp) VALUES `
-      sql += `(${inJSON.CTA},'${inJSON.m1}','${inJSON.m2}',`
+      sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs,dateUp) VALUES `
+      sql += `(${inJSON.CTA}, '${inJSON.contribuyente}','${inJSON.m1}','${inJSON.m2}',`
       sql += `'${inJSON.tc}','${inJSON.zona}','${inJSON.bg}',`
       sql += `'${inJSON.periodo}','${inJSON.total}','${inJSON.idEmpleado}','${inJSON.labelConsta}','${inJSON.otroservicio}','${inJSON.labelCerti}','${inJSON.obs}','${inJSON.dateUp}')`;
     }
@@ -37,6 +37,7 @@ if (inJSON.dateUp === '') {
           let c = 0;
           outJSON.idOrden = result[0].idOrden
           outJSON.dateUp = result[0].dateUp
+          outJSON.idMov = "1"
           sql = `INSERT INTO folios(idOrden, tp) VALUES (${outJSON.idOrden},'${inJSON.tp}')`
           con.query(sql, (err, result) => {
             outJSON.folio = result.insertId
@@ -124,12 +125,13 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                         let idOrden = result[0].idOrden
                         outJSON.idOrden = idOrden
                         outJSON.dateUp = inJSON.dateUp
+                        outJSON.idMov = "2"
                         sql = `SELECT * FROM folios WHERE idOrden=${idOrden} AND tp='${inJSON.tp}'`
                         con.query(sql, (err, result, fields) => {
                           outJSON.folio = result[0].idFolio
-                          sql = `UPDATE ordenes${inJSON.tp} SET m1='${inJSON.m1}', m2='${inJSON.m2}', tc='${inJSON.tc}', `
+                          sql = `UPDATE ordenes${inJSON.tp} SET nombre='${inJSON.contribuyente}', m1='${inJSON.m1}', m2='${inJSON.m2}', tc='${inJSON.tc}', `
                           sql += `zona='${inJSON.zona}', bg='${inJSON.bg}', total='${inJSON.total}', periodo='${inJSON.periodo}', `
-                          sql += `constancia='${inJSON.labelConsta}', certi='${inJSON.labelCerti}',`
+                          sql += `constancia='${inJSON.labelConsta}', certi='${inJSON.labelCerti}', `
                           sql += `otroservicio='${inJSON.otroservicio}', obs='${inJSON.obs}', dateUp='${inJSON.dateUp}' WHERE idOrden=${idOrden}`
                           con.query(sql, (err, result, fields) => {
                             if (!err) {
@@ -224,6 +226,7 @@ const _regO = (req, res) => {
         if (err) {
           console.log(`Error: ${err}`);
         } else {
+          //getDataHistory
           if(inJSON.changeN){
             let sql = `UPDATE padron${inJSON.tp} SET contribuyente='${inJSON.contribuyente}' WHERE CTA=${inJSON.CTA}`;
             con.query(sql, (err, result, fields) => {

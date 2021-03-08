@@ -8,7 +8,7 @@ const path = require('path');
 const {
     comprobarU,regO,genFolio,saveDataL,allPadrones,padrones,getPredial,byFolio,
     getZone,registrarF,informeG,genCerti,actualizarC,obtenerOF,actualizarU,actualizarP,registrarC,
-    getAvatar
+    getAvatar, setMov, getMov
 } = require('./functions');
 let app = express();
 let options = null;
@@ -393,6 +393,40 @@ app.all('/getAvatar', (req, res) => {
             setResponseHeadersJSON(res);
 
             getAvatar(req,res)
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/setMov', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            setMov(req,res);
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/getMov', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            getMov(req,res);
        // })
         //res.send(filename)
 
