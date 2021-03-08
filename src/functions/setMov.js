@@ -18,9 +18,10 @@ const setResponse = (res, outJSON,con) => {
 }
 
 insertMov = (inJSON, outJSON,res, con) => {
-  sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory) VALUES `
+  const d = new Date();
+  sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory,dateIn) VALUES `
   sql += `('${inJSON.idMov}','${inJSON.idEmpleado}','${inJSON.CTA}',`
-  sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}')`
+  sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}','${d.toLocaleString()}')`
   con.query(sql, (err, result, fields) => {
 
       outJSON.exito = 1

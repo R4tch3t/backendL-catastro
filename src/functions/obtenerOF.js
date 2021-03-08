@@ -40,9 +40,9 @@ const _obtenerOF = (req, res) => {
           sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
         switch(inJSON.op){
          case 1: 
-          subquery = " AND o.CTA="+inJSON.CTA
-          sql = `SELECT * FROM ordenesu o, padronu pa, ubiprediou u WHERE `
-          sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') ${subquery} `
+          subquery = "o.CTA="+inJSON.CTA
+          sql = `SELECT * FROM ordenesu o, padronu pa, ubiprediou u WHERE ${subquery} AND `
+          sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') `
           sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
         
          break;
@@ -73,10 +73,37 @@ const _obtenerOF = (req, res) => {
               outJSON.error.name='error01';
               outJSON.ordenesu = []
             } 
-            sql = `SELECT * FROM ordenesr o, padronr pa, ubipredior u WHERE `
+            /*sql = `SELECT * FROM ordenesr o, padronr pa, ubipredior u WHERE `
+            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') `
+            sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`*/
+            subquery=''
+          sql = `SELECT * FROM ordenesr o, padronr pa, ubipredior u WHERE `
+          sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') ${subquery} `
+          sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
+          switch(inJSON.op){
+          case 1: 
+            subquery = "o.CTA="+inJSON.CTA
+            sql = `SELECT * FROM ordenesr o, padronr pa, ubipredior u WHERE ${subquery} AND `
             sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') `
             sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
           
+          break;
+          case 2: 
+            subquery = " AND pa.contribuyente LIKE '%"+inJSON.CTA+"%'"
+            sql = `SELECT * FROM ordenesr o, padronr pa, ubipredior u WHERE `
+            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') ${subquery} `
+            sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
+          
+          break;
+          case 3: 
+            subquery = " AND f.idFolio="+inJSON.CTA+" AND o.idOrden=f.idOrden"
+            sql = `SELECT * FROM ordenesr o, padronr pa, ubipredior u, folios f WHERE `
+            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') ${subquery} `
+            sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
+          
+          break;
+          }
+
             con.query(sql, (err, result, fields) => {
               if (!err) {
                 if (result.length > 0) {

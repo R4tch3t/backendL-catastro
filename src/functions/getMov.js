@@ -60,7 +60,8 @@ const _getMov = (req, res) => {
               checkUbi(inJSON, outJSON, res, con);
             });
           }else{*/
-            console.log(new Date())
+            //process.env.TZ = "America/Mexico_City"
+            
             getData(inJSON, outJSON, res, con);
           //}
           //console.log("Connected!");
