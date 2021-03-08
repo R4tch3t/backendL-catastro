@@ -60,6 +60,7 @@ const _getMov = (req, res) => {
               checkUbi(inJSON, outJSON, res, con);
             });
           }else{*/
+            console.log(new Date())
             getData(inJSON, outJSON, res, con);
           //}
           //console.log("Connected!");
