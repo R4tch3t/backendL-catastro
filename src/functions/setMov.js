@@ -18,11 +18,9 @@ const setResponse = (res, outJSON,con) => {
 }
 
 insertMov = (inJSON, outJSON,res, con) => {
-  let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-  const dateIn = new Date(new Date() - tzoffset*2).toISOString()
-  sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory,dateIn) VALUES `
+  sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory) VALUES `
   sql += `('${inJSON.idMov}','${inJSON.idEmpleado}','${inJSON.CTA}',`
-  sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}','${dateIn}')`
+  sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}')`
   con.query(sql, (err, result, fields) => {
 
       outJSON.exito = 1
