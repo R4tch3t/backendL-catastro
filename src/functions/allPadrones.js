@@ -19,6 +19,7 @@ const setResponse = (res, outJSON,con) => {
 
 const padronR = (subqueryB,con,res,inJSON,outJSON) => {
 const sql = `SELECT * FROM padronr p, ubipredior u ${subqueryB} ORDER by p.CTA ASC`
+const {countP,nextP} = inJSON; 
 con.query(sql, (err, result, fields) => {
   try{
       if (!err) {
@@ -32,7 +33,7 @@ con.query(sql, (err, result, fields) => {
          
         }
       }
-      subqueryB = 'WHERE p.CTA < 50'
+      subqueryB = 'WHERE p.CTA>'+countP+' AND p.CTA<='+nextP
       //var subqueryN = ''
       if (inJSON.CTAnombre !== '') {
         if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
@@ -71,7 +72,9 @@ const padronU = (req, res) => {
         console.log(`Err on con: ${err}`);
         
       } else {
-        let subqueryB = 'WHERE p.CTA < 50'
+        const {countP,nextP} = inJSON; 
+        //const nextP = countP+50;  
+        let subqueryB = 'WHERE p.CTA>'+countP+' AND p.CTA<='+nextP 
         //var subqueryN = ''
         if (inJSON.CTAnombre !== '') {
           if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
@@ -138,7 +141,7 @@ const padronU = (req, res) => {
           } else {
 
           }
-          subqueryB = 'WHERE p.CTA < 50 AND u.CTA=p.CTA'
+          subqueryB = 'WHERE p.CTA>'+countP+' AND p.CTA<='+nextP+' AND u.CTA=p.CTA'
               //var subqueryN = ''
               if (inJSON.CTAnombre !== '') {
                 if (inJSON.tipoB != undefined && inJSON.tipoB === 0) {
@@ -174,16 +177,61 @@ const padronU = (req, res) => {
 
 }
 
+const getLength = (req, res) => {
+  try{
+    let outJSON = {}
+    let inJSON = req.body
+    let con = mysql.createConnection({
+        host: "localhost",
+        user: process.env.NODE_MYSQL_USER,
+        password: process.env.NODE_MYSQL_PASS,
+        database: "dbcatastro"
+    });
+    con.connect((err) => {
+      outJSON = {};
+      outJSON.error = {};
+      if (err) {
+        console.log(`Err on con: ${err}`);
+        
+      } else {
+        let sql = `SELECT * FROM padronu pu WHERE pu.contribuyente NOT LIKE '%LIBRE%' AND pu.contribuyente!='' ORDER by pu.CTA DESC`
+        
+        con.query(sql, (err, result, fields) => {
+          outJSON.lengthU = result.length
+          sql = `SELECT * FROM padronr pr WHERE pr.contribuyente NOT LIKE '%LIBRE%' AND pr.contribuyente!='' ORDER by pr.CTA DESC`
+        
+          con.query(sql, (err, result, fields) => {
+            outJSON.lengthR = result.length
+            outJSON.lengthUR = outJSON.lengthU + outJSON.lengthR 
+            setResponse(res, outJSON, con)
+            
+          });
+        });
+      }
+    });
+  }catch(e){
+    console.log(e);
+  }
+}
+
   const allPadrones = (req, res) => {
     try {
-      const {CTAnombre} = req.body
-      if (CTAnombre!==undefined) {
+      const {CTAnombre,op} = req.body
+      
+        switch(op){
+          case 1:
+            getLength(req, res)
+          break
+           default:
+            if (CTAnombre!==undefined) {
+              padronU(req, res)
+            } else {
+              res.end()
+            }
+          break
+        }
 
-          padronU(req, res)
-
-      } else {
-          res.end()
-      }
+      
             
     } catch (e) {
       console.log(e)
