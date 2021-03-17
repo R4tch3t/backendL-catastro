@@ -19,9 +19,10 @@ const setResponse = (res, outJSON,con) => {
 
 insertMov = (inJSON, outJSON,res, con) => {
   const d = new Date();
-  sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory,dateIn) VALUES `
+  let sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory,dateIn) VALUES `
   sql += `('${inJSON.idMov}','${inJSON.idEmpleado}','${inJSON.CTA}',`
-  sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}','${d}')`
+  sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}','${d.toISOString()}')`
+  console.log(sql)
   con.query(sql, (err, result, fields) => {
 
       outJSON.exito = 1
@@ -33,7 +34,7 @@ insertMov = (inJSON, outJSON,res, con) => {
 
 const setData = (inJSON, outJSON, res, con) => {
 
-  sql = `INSERT INTO datahistory (contribuyente,tp,calle,numero,lote,manzana,col,cp,municipio,localidad,obs,m1,m2,tc,zona,bg) VALUES `
+  let sql = `INSERT INTO datahistory (contribuyente,tp,calle,numero,lote,manzana,col,cp,municipio,localidad,obs,m1,m2,tc,zona,bg) VALUES `
   sql += `('${inJSON.contribuyente.contribuyente}','${inJSON.tp}','${inJSON.calle}',`
   sql += `'${inJSON.numero}','${inJSON.lote}','${inJSON.manzana}',`
   sql += `'${inJSON.colonia}','${inJSON.cp}','${inJSON.municipio}','${inJSON.localidad}',`;
