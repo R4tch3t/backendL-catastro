@@ -41,6 +41,7 @@ if (inJSON.dateUp === '') {
           outJSON.dateUp = result[0].dateUp
           outJSON.dateUpL = new Date(outJSON.dateUp).toLocaleString();
           outJSON.dateUp = new Date(outJSON.dateUp)
+          outJSON.dateUp.setHours(outJSON.dateUp.getHours()-6) 
           outJSON.dateUp = outJSON.dateUp.toISOString()
           outJSON.idMov = "1"
           sql = `INSERT INTO folios(idOrden, tp) VALUES (${outJSON.idOrden},'${inJSON.tp}')`
