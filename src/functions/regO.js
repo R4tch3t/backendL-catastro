@@ -130,7 +130,7 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                       } else {
                         let idOrden = result[0].idOrden
                         outJSON.idOrden = idOrden
-                        const newDate = new Date(inJSON.dateUp)
+                        let newDate = new Date(inJSON.dateUp)
                         newDate.setHours(newDate.getHours()-6)
                         newDate = newDate.toISOString()
                         outJSON.dateUp = new Date(inJSON.dateUp)
