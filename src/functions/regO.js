@@ -128,7 +128,9 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                         let idOrden = result[0].idOrden
                         outJSON.idOrden = idOrden
                         outJSON.dateUp = inJSON.dateUp
-                        outJSON.dateUpL = new Date(outJSON.dateUp).toLocaleString();
+                        outJSON.dateUpL = new Date(outJSON.dateUp)//.toLocaleString();
+                        outJSON.dateUpL.setHours(outJSON.dateUpL.getHours()+6)
+                        outJSON.dateUpL = outJSON.dateUpL.toLocaleString();
                         outJSON.idMov = "2"
                         sql = `SELECT * FROM folios WHERE idOrden=${idOrden} AND tp='${inJSON.tp}'`
                         con.query(sql, (err, result, fields) => {
