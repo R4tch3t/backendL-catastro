@@ -19,6 +19,7 @@ const setResponse = (res, outJSON,con) => {
 
 insertMov = (inJSON, outJSON,res, con) => {
   const d = new Date();
+  d.setHours(d.getHours()-6);
   let sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory,dateIn) VALUES `
   sql += `('${inJSON.idMov}','${inJSON.idEmpleado}','${inJSON.CTA}',`
   sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}','${d.toISOString()}')`
