@@ -40,6 +40,8 @@ if (inJSON.dateUp === '') {
           outJSON.idOrden = result[0].idOrden
           outJSON.dateUp = result[0].dateUp
           outJSON.dateUpL = new Date(outJSON.dateUp).toLocaleString();
+          outJSON.dateUp = new Date(outJSON.dateUp)
+          outJSON.dateUp = outJSON.dateUp.toISOString()
           outJSON.idMov = "1"
           sql = `INSERT INTO folios(idOrden, tp) VALUES (${outJSON.idOrden},'${inJSON.tp}')`
           con.query(sql, (err, result) => {
