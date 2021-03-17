@@ -85,8 +85,9 @@ const _padrones = (req, res) => {
                                                     if (result.length > 0) {
                                                         outJSON.orden = result[0]
                                                         const dO = new Date(outJSON.orden.dateUp)
-                                                        dO.setHours(dO.getHours()-1) 
+                                                        dO.setHours(dO.getHours()-6) 
                                                         outJSON.orden.dateUpL = dO.toLocaleString();
+                                                        console.log(dO)
                                                         if (outJSON.orden.zona === "0" || outJSON.orden.zona === "") {
                                                             outJSON.orden.zona = getZone(outJSON.orden.colonia)
                                                         }
