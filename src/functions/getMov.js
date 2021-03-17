@@ -17,21 +17,118 @@ const setResponse = (res, outJSON,con) => {
        // server.listen(port, hostname);
 }
 
-getLength = (inJSON, outJSON,res, con) => {
-  let sql = `SELECT * FROM history ORDER BY idHistory DESC`;
-  con.query(sql, (err, result, fields) => {
-    outJSON.lHistory = result[0].idHistory;
-    setResponse(res,outJSON,con);
-  });
+const getLength = (req, res) => {
+  try{
+    let outJSON = {}
+    let inJSON = req.body
+    let dateLabel = null;
+    let dateLast = '';
+    let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    let con = mysql.createConnection({
+        host: "localhost",
+        user: process.env.NODE_MYSQL_USER,
+        password: process.env.NODE_MYSQL_PASS,
+        database: "dbcatastro"
+    });
+    con.connect((err) => {
+      if(!err){
+        let sql = `SELECT * FROM history WHERE dateIn>'${inJSON.fi}' AND dateIn<='${inJSON.ff}' ORDER BY idHistory DESC`;
+
+        switch(inJSON.op){
+          case 1:
+              sql = `SELECT * FROM history WHERE CTA=${inJSON.CTA} ORDER BY idHistory DESC`;
+          break;
+          case 2:
+              sql = `SELECT * FROM history h, movs m WHERE m.mov LIKE '%${inJSON.CTA}%' AND h.idMov=m.idMov ORDER BY h.idHistory DESC`;
+          break;
+          case 3:
+              sql = `SELECT * FROM history WHERE folio=${inJSON.CTA} ORDER BY idHistory DESC`;
+          break;
+        }
+        con.query(sql, (err, result, fields) => {
+          if(result&&result.length>0){
+            outJSON.lengthH = result.length;
+            outJSON.countP = result[result.length-1].idHistory-1;
+            outJSON.nextP = outJSON.countP + 50;
+            if(outJSON.nextP>result[0].idHistory){
+              outJSON.nextP=result[0].idHistory
+            }
+          }
+          setResponse(res,outJSON,con);
+        });
+      }
+    });
+  } catch(e){
+    console.log(e)
+  }
 }
 
-const getData = (inJSON, outJSON, res, con) => {
-  let {count} = inJSON;
-  let nextPage = count + 50; 
-  outJSON.count = nextPage; 
-  let sql = `SELECT * FROM history h, datahistory dh, movs m WHERE h.idHistory>${count} AND h.idHistory<=${nextPage} AND dh.idDataHistory=h.idDataHistory AND m.idMov=h.idMov ORDER BY h.idHistory ASC`;
+/*getLength2 = (inJSON, outJSON,res, con) => {
+  let sql = `SELECT * FROM history WHERE dateIn>'${inJSON.fi}' AND dateIn<='${inJSON.ff}' ORDER BY idHistory DESC`;
+
   con.query(sql, (err, result, fields) => {
-    outJSON.history = result;
+    outJSON.lHistory = result.length;
+    outJSON.countP = result[result.length-1].idHistory;
+    outJSON.nextP = outJSON.countP + 50;
+    if(outJSON.nextP>result[0].idHistory){
+      outJSON.nextP=result[0].idHistory
+    }
+    setResponse(res,outJSON,con);
+  });
+}*/
+
+const getData = (inJSON, outJSON, res, con) => {
+  let {countP,nextP} = inJSON;
+  //let nextP = countP + 50; 
+  //outJSON.count = nextPage; 
+  let sql = `SELECT * FROM history h, datahistory dh, movs m WHERE h.idHistory>${countP} AND h.idHistory<=${nextP} AND dh.idDataHistory=h.idDataHistory AND m.idMov=h.idMov ORDER BY h.idHistory ASC`;
+  switch(inJSON.op){
+          case 1:
+              sql = `SELECT * FROM history h, datahistory dh, movs m WHERE h.CTA=${inJSON.CTA} AND dh.idDataHistory=h.idDataHistory AND m.idMov=h.idMov ORDER BY idHistory DESC`;
+          break;
+          case 2:
+              sql = `SELECT * FROM history h, datahistory dh, movs m WHERE m.mov LIKE '%${inJSON.CTA}%' AND h.idMov=m.idMov AND dh.idDataHistory=h.idDataHistory ORDER BY h.idHistory DESC`;
+          break;
+          case 3:
+              sql = `SELECT * FROM history h, datahistory dh, movs m WHERE h.folio=${inJSON.CTA} AND dh.idDataHistory=h.idDataHistory AND m.idMov=h.idMov ORDER BY h.idHistory DESC`;
+          break;
+        }
+  con.query(sql, (err, result, fields) => {
+    outJSON.history = [];
+    let i = 0;
+    result.forEach(e => { 
+      e.dateIn = new Date(e.dateIn)
+      //e.dateIn = new Date(e.dateIn-tzoffset)
+      outJSON.history.push({
+        key: `${e.CTA}${i}`,
+        idHistory: e.idHistory,
+       // nMov: e.idMov===1?"Generar Orden de Pago":(e.idMov===2?"Actualizar Orden de Pago":(e.idMov===3?"Registrar Contribuyente":(e.idMov===4?"Actualizar Contribuyente":""))),
+        mov: e.mov,
+        nombre: e.contribuyente,
+        tp: e.tp,
+        calle: e.calle,
+        numero: e.numero,
+        lote: e.lote,
+        manzana: e.manzana,
+        col: e.col,
+        cp: e.cp,
+        municipio: e.municipio,
+        localidad: e.localidad,
+        obs: e.obs,
+        m1: e.m1,
+        m2: e.m2,
+        zona: e.zona,
+        tc: e.tc,
+        bg: e.bg,
+        idUsuario: e.idUsuario,
+        CTA: e.CTA,
+        idOrden: e.idOrden,
+        folio: e.folio,
+        dateIn: e.dateIn.toLocaleString()
+        //dateIn: new Date(e.dateIn - tzoffset).toISOString().slice(0, -1),
+      })
+      i++
+    });
     setResponse(res,outJSON,con);
   });
 }
@@ -75,14 +172,14 @@ const _getMov = (req, res) => {
 
 const getMov = (req, res) => {
         try {
-            const {op} = req.body
-                   if (op) {
-                    switch(op){
+            const {s,op} = req.body
+                   if (s!==undefined||op!==undefined) {
+                    switch(s){
                      case 1:
-                       _getMov(req, res)
+                       getLength(req, res);
                       break;
-                     case 2:
-                       getLength()
+                     default:
+                       _getMov(req, res)
                       break;
                     }
 

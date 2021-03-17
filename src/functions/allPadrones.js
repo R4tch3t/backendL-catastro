@@ -52,7 +52,7 @@ con.query(sql, (err, result, fields) => {
         
         setResponse(res, outJSON, con)
       });
-})    
+});
 }
 
 const padronU = (req, res) => {
@@ -194,11 +194,11 @@ const getLength = (req, res) => {
         console.log(`Err on con: ${err}`);
         
       } else {
-        let sql = `SELECT * FROM padronu pu WHERE pu.contribuyente NOT LIKE '%LIBRE%' AND pu.contribuyente!='' ORDER by pu.CTA DESC`
-        
+        //let sql = `SELECT * FROM padronu pu WHERE pu.contribuyente NOT LIKE '%LIBRE%' AND pu.contribuyente!='' ORDER by pu.CTA DESC`
+        let sql = `SELECT * FROM padronu pu ORDER by pu.CTA DESC`
         con.query(sql, (err, result, fields) => {
           outJSON.lengthU = result.length
-          sql = `SELECT * FROM padronr pr WHERE pr.contribuyente NOT LIKE '%LIBRE%' AND pr.contribuyente!='' ORDER by pr.CTA DESC`
+          sql = `SELECT * FROM padronr pr ORDER by pr.CTA DESC`
         
           con.query(sql, (err, result, fields) => {
             outJSON.lengthR = result.length
