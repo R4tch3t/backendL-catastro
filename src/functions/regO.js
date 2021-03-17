@@ -129,7 +129,7 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                         outJSON.idOrden = idOrden
                         outJSON.dateUp = new Date(inJSON.dateUp)
                         outJSON.dateUp.setHours(outJSON.dateUp.getHours()-6)
-                        outJSON.dateUp = inJSON.dateUp.toISOString()
+                        outJSON.dateUp = outJSON.dateUp.toISOString()
                         outJSON.dateUpL = new Date(outJSON.dateUp)//.toLocaleString();
                         //outJSON.dateUpL.setHours(outJSON.dateUpL.getHours()+6)
                         outJSON.dateUpL = outJSON.dateUpL.toLocaleString();
