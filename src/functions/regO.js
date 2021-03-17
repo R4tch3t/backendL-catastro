@@ -20,10 +20,12 @@ const setResponse = (res, outJSON,con) => {
 insertOrden = (inJSON, outJSON,res, con) => {
 
 if (inJSON.dateUp === '') {
-      sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs) VALUES `
+  const d = new Date();
+  d.setHours(d.getHours()-6);
+      sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs,dateUp) VALUES `
       sql += `(${inJSON.CTA},'${inJSON.contribuyente}','${inJSON.m1}','${inJSON.m2}',`
       sql += `'${inJSON.tc}','${inJSON.zona}','${inJSON.bg}',`
-      sql += `'${inJSON.periodo}','${inJSON.total}','${inJSON.idEmpleado}','${inJSON.labelConsta}','${inJSON.otroservicio}','${inJSON.labelCerti}','${inJSON.obs}')`;
+      sql += `'${inJSON.periodo}','${inJSON.total}','${inJSON.idEmpleado}','${inJSON.labelConsta}','${inJSON.otroservicio}','${inJSON.labelCerti}','${inJSON.obs}','${d.toISOString()}')`;
     } else {
       sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs,dateUp) VALUES `
       sql += `(${inJSON.CTA}, '${inJSON.contribuyente}','${inJSON.m1}','${inJSON.m2}',`
