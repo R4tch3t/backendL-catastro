@@ -32,7 +32,7 @@ const getLength = (req, res) => {
     });
     con.connect((err) => {
       if(!err){
-        let sql = `SELECT * FROM history WHERE dateIn>'${inJSON.fi}' AND dateIn<='${inJSON.ff}' ORDER BY idHistory DESC`;
+        let sql = `SELECT * FROM history h, datahistory dh WHERE h.dateIn>'${inJSON.fi}' AND h.dateIn<='${inJSON.ff}' AND dh.idDataHistory=h.idDataHistory ORDER BY h.idHistory DESC`;
 
         switch(inJSON.op){
           case 1:
@@ -50,6 +50,7 @@ const getLength = (req, res) => {
             outJSON.lengthH = result.length;
             outJSON.countP = result[result.length-1].idHistory-1;
             outJSON.nextP = outJSON.countP + 50;
+            outJSON.lengthHID=result[0].idHistory
             if(outJSON.nextP>result[0].idHistory){
               outJSON.nextP=result[0].idHistory
             }
