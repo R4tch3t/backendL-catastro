@@ -32,7 +32,7 @@ const getLength = (req, res) => {
     });
     con.connect((err) => {
       if(!err){
-        let sql = `SELECT * FROM history h, datahistory dh WHERE h.dateIn>'${inJSON.fi}' AND h.dateIn<='${inJSON.ff}' AND dh.idDataHistory=h.idDataHistory ORDER BY h.idHistory DESC`;
+        let sql = `SELECT * FROM history WHERE dateIn>'${inJSON.fi}' AND dateIn<='${inJSON.ff}' ORDER BY idHistory DESC`;
 
         switch(inJSON.op){
           case 1:
