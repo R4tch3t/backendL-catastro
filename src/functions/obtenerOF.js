@@ -72,7 +72,6 @@ const setNames = (res, inJSON, outJSON, con)=>{
                 
               });
             });
-            console.log("finishedU")
 
           }
         });
@@ -91,7 +90,6 @@ const setNames = (res, inJSON, outJSON, con)=>{
                 
               });
             });
-            console.log("finishedR")
             
           }
         });
@@ -110,7 +108,6 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
           sql += `${subquery} `
           sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
           */
-         console.log(sql);
         switch(inJSON.op){
          case 1: 
           subquery = "o.CTA="+inJSON.CTA+``
