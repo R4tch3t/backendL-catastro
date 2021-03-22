@@ -4,11 +4,13 @@ let express = require('express');
 const httport = 80;
 const httpsort = 443;
 const path = require('path');
+currentCTA = undefined;
+pdf64 = {};
 //const cors = require('cors');
 const {
     comprobarU,regO,genFolio,saveDataL,allPadrones,padrones,getPredial,byFolio,
     getZone,registrarF,informeG,genCerti,actualizarC,obtenerOF,actualizarU,actualizarP,registrarC,
-    getAvatar, setMov, getMov
+    getAvatar, setMov, getMov, regE
 } = require('./functions');
 let app = express();
 let options = null;
@@ -427,6 +429,23 @@ app.all('/getMov', (req, res) => {
             setResponseHeadersJSON(res);
 
             getMov(req,res);
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/regE', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            regE(req,res);
        // })
         //res.send(filename)
 
