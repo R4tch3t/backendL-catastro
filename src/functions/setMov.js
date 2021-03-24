@@ -23,7 +23,6 @@ insertMov = (inJSON, outJSON,res, con) => {
   let sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory,dateIn) VALUES `
   sql += `('${inJSON.idMov}','${inJSON.idEmpleado}','${inJSON.CTA}',`
   sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}','${d.toISOString()}')`
-  console.log(sql)
   con.query(sql, (err, result, fields) => {
 
       outJSON.exito = 1

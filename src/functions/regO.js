@@ -144,6 +144,11 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                         sql = `SELECT * FROM folios WHERE idOrden=${idOrden} AND tp='${inJSON.tp}'`
                         con.query(sql, (err, result, fields) => {
                           outJSON.folio = result[0].idFolio
+                          sql = `UPDATE padron${inJSON.tp} SET m1='${inJSON.m1}', m2='${inJSON.m2}', tc='${inJSON.tc}', `
+                          sql += `zona='${inJSON.zona}', bg='${inJSON.bg}', `
+                          sql += `observaciones='${inJSON.obs}' WHERE CTA=${inJSON.CTA}`
+                          con.query(sql, (err, result, fields) => {
+
                           sql = `UPDATE ordenes${inJSON.tp} SET nombre='${inJSON.contribuyente}', m1='${inJSON.m1}', m2='${inJSON.m2}', tc='${inJSON.tc}', `
                           sql += `zona='${inJSON.zona}', bg='${inJSON.bg}', total='${inJSON.total}', periodo='${inJSON.periodo}', `
                           sql += `constancia='${inJSON.labelConsta}', certi='${inJSON.labelCerti}', `
@@ -208,6 +213,7 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                           });
 
                         })
+                       }) 
                       }
 
                     }
