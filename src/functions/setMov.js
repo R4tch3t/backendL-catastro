@@ -34,12 +34,14 @@ insertMov = (inJSON, outJSON,res, con) => {
 
 const setData = (inJSON, outJSON, res, con) => {
 
-  let sql = `INSERT INTO datahistory (contribuyente,tp,calle,numero,lote,manzana,col,cp,municipio,localidad,obs,m1,m2,tc,zona,bg) VALUES `
-  sql += `('${inJSON.contribuyente.contribuyente}','${inJSON.tp}','${inJSON.calle}',`
-  sql += `'${inJSON.numero}','${inJSON.lote}','${inJSON.manzana}',`
-  sql += `'${inJSON.colonia}','${inJSON.cp}','${inJSON.municipio}','${inJSON.localidad}',`;
-  sql += `'${inJSON.obs}','${inJSON.m1}','${inJSON.m2}','${inJSON.tc}','${inJSON.zona}',`;
-  sql += `'${inJSON.bg}')`;
+  let sql = `INSERT INTO datahistory (contribuyenteOld,contribuyente,tpOld,tp,calleOld,calle,numeroOld,numero,loteOld,lote,manzanaOld,manzana,colOld,col,cpOld,cp, `
+  sql+= `municipioOld,municipio,localidadOld,localidad,obsOld,obs,m1Old,m1,m2Old,m2,tcOld,tc,zonaOld,zona,bgOld,bg) VALUES`
+  sql += `('${inJSON.contribuyenteOld.contribuyente.contribuyente}','${inJSON.contribuyente.contribuyente}','${inJSON.tp}','${inJSON.tp}',`
+  sql += `'${inJSON.contribuyenteOld.ubicacion.calle}', '${inJSON.calle}', '${inJSON.contribuyenteOld.ubicacion.numero}', '${inJSON.numero}', '${inJSON.contribuyenteOld.ubicacion.lote}','${inJSON.lote}',`
+  sql += `'${inJSON.contribuyenteOld.ubicacion.manzana}', '${inJSON.manzana}', '${inJSON.contribuyenteOld.ubicacion.colonia}','${inJSON.colonia}',`;
+  sql += `'${inJSON.contribuyenteOld.ubicacion.cp}','${inJSON.cp}', '${inJSON.contribuyenteOld.ubicacion.municipio}', '${inJSON.municipio}', '${inJSON.contribuyenteOld.ubicacion.localidad}','${inJSON.localidad}',`;
+  sql += `'${inJSON.contribuyenteOld.contribuyente.observaciones}','${inJSON.obs}','${inJSON.contribuyenteOld.contribuyente.m1}','${inJSON.m1}','${inJSON.contribuyenteOld.contribuyente.m2}','${inJSON.m2}',`;
+  sql += `'${inJSON.contribuyenteOld.contribuyente.tc}','${inJSON.tc}','${inJSON.contribuyenteOld.contribuyente.zona}','${inJSON.zona}','${inJSON.contribuyenteOld.contribuyente.bg}','${inJSON.bg}')`
   con.query(sql, (err, result, fields) => {
 
     if (result) {
