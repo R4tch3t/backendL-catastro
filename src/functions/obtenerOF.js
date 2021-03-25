@@ -124,7 +124,7 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
           sql = `SELECT * FROM ordenesu o, padronu pa, ubiprediou u WHERE `
           sql += `${subquery} `
           sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`
-          setNames(res, inJSON, outJSON, con);
+        //  setNames(res, inJSON, outJSON, con);
          break;
          case 3: 
           subquery = "f.idFolio="+inJSON.CTA+` AND o.idOrden=f.idOrden`
