@@ -42,18 +42,20 @@ const round = (num, decimales = 2) => {
           data.total = 0
           data.aux = 0
           data.isAlta = false
-          data.porcentajeU = round(outJSON.countU / outJSON.lengthU * 100)
+          /*data.porcentajeU = round(outJSON.countU / outJSON.lengthU * 100)
           data.porcentajeR = round(outJSON.countR / outJSON.lengthR * 100)
-          data.porcentajeT = round((data.porcentajeU + data.porcentajeR) / 2)
+          data.porcentajeT = round((data.porcentajeU + data.porcentajeR) / 2)*/
                             
             let sql = `SELECT * FROM ordenesu o, predialu pr WHERE `
             sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') `
             sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
-
+           /* console.log("informeG")
+            console.log(sql)*/
             con.query(sql, (err, result, fields) => {
                 if (!err) {
                     if (result.length > 0) {
                         //outJSON.ordenesu = result
+                        outJSON.lengthU=result.length
                         result.forEach(e=>{
                                
                         switch (e.idImpuesto) {
@@ -93,6 +95,7 @@ const round = (num, decimales = 2) => {
                             break;
                         case 16:
                         case 17:
+                        case 18:
                         case 19:
                             if(data.isAlta){
                             data.totalA += parseInt(e.val)
@@ -117,6 +120,7 @@ const round = (num, decimales = 2) => {
                     con.query(sql, (err, result, fields) => {
                         if (!err) {
                             if (result.length > 0) {
+                                outJSON.lengthR=result.length
                                  idOrden=0
           result.forEach(e => {
             switch (e.idImpuesto) {
@@ -160,6 +164,7 @@ const round = (num, decimales = 2) => {
               
               case 16:
               case 17:
+              case 18:
               case 19:
                 if(data.isAlta){
                   data.totalA += parseInt(e.val)
@@ -179,9 +184,9 @@ const round = (num, decimales = 2) => {
                                 outJSON.error.name = 'error02';
                                 outJSON.ordenesr = []
                             }
-                                sql = `SELECT * FROM ordenes o WHERE `
+                                sql = `SELECT * FROM ordenes o, formas f WHERE `
                                     sql += `o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}'`
-                                    sql += ` ORDER by o.dateUp ASC, o.idOrden ASC`
+                                    sql += `AND f.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
 
                                     con.query(sql, (err, result, fields) => {
                                         if (!err) {
@@ -196,6 +201,10 @@ const round = (num, decimales = 2) => {
                                                 outJSON.ordenes = []
                                             }
                                         }
+                                        data.porcentajeU = round(outJSON.countU / outJSON.lengthU * 100)
+          data.porcentajeR = round(outJSON.countR / outJSON.lengthR * 100)
+          data.porcentajeT = round((data.porcentajeU + data.porcentajeR) / 2)
+          outJSON.lengthUR=outJSON.lengthR+outJSON.lengthU
                                         data.total = data.totalPU + data.totalPR + data.totalF + data.totalA
                                         //const totalS = spellNumber(data.total)
                                         outJSON.totalSs=''+data.total
@@ -333,6 +342,7 @@ const round = (num, decimales = 2) => {
                 if (!err) {
                     if (result.length > 0) {
                         //outJSON.ordenesu = result
+                        outJSON.lengthU=result.length
                         result.forEach(e=>{
                                 switch (e.idImpuesto){
                                 case 1:
@@ -381,7 +391,9 @@ const round = (num, decimales = 2) => {
                                     let aux = data.vir * 0.15
                                     aux = Math.round(aux) * 2
                                     aux += data.vir
+                                    aux = aux===0?1:aux;
                                     //data.rezagosI += parseInt(e.val)
+                                    e.val=e.val===0?1:e.val
                                     data.rezagosI += ((parseInt(e.val) / aux) * parseInt(data.vir))
                                 if (data.rezOrden !== e.idOrden) {
                                     data.rezagosN++
@@ -392,7 +404,6 @@ const round = (num, decimales = 2) => {
                                 
                             });
                             
-
                     } else {
                         outJSON.error.name = 'error01';
                         outJSON.ordenesu = []
@@ -405,6 +416,7 @@ const round = (num, decimales = 2) => {
                         if (!err) {
                             if (result.length > 0) {
                                 //outJSON.ordenesr = result
+                                outJSON.lengthR=result.length
                                 data.reOrden=0
                             data.vOrden=0
                             data.rezOrden=0
@@ -450,6 +462,7 @@ const round = (num, decimales = 2) => {
                                     let aux = data.vir * 0.15
                                 aux = Math.round(aux) * 2
                                 aux += data.vir
+                                aux = aux===0?1:aux;
                                 data.rezagosIR += ((parseInt(e.val) / aux) * parseInt(data.vir))
                                 //data.rezagosIR += ((parseInt(e.val) / data.rusticoI) * parseInt(e.val))
                                 if (data.rezOrden !== e.idOrden) {

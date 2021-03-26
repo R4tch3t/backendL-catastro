@@ -203,6 +203,125 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
       
 }
 
+const getOrdenO = (inJSON,outJSON,con,res) =>{
+        let dateLast = '';
+        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+        const {countPO,nextPO} = inJSON; 
+        if(new Date(countPO)<new Date(nextPO)||(inJSON.op>0&&inJSON.op<4)){
+        let subquery = '';
+        let sql = `SELECT * FROM ordenes o WHERE `
+          sql += `(o.dateUp>='${countPO}' AND o.dateUp<'${nextPO}') ${subquery} `
+          sql += `ORDER by o.dateUp ASC`
+        switch(inJSON.op){
+          case 1: 
+            subquery = "o.CTA="+inJSON.CTA
+            sql = `SELECT * FROM ordenes o WHERE ${subquery}`
+            sql += ` ORDER by o.dateUp ASC`
+          
+          break;
+          case 2: 
+            subquery = "o.nombre LIKE '%"+inJSON.CTA+`%'`
+            sql = `SELECT * FROM ordenes o WHERE `
+            sql += ` ${subquery} `
+            sql += `ORDER by o.dateUp ASC`
+          
+          break;
+          case 3: 
+            subquery = "f.idFolio="+inJSON.CTA+` AND o.idOrden=f.idOrden`
+            sql = `SELECT * FROM ordenes o, folios f WHERE `
+            sql += ` ${subquery} `
+            sql += `ORDER by o.dateUp ASC`
+          
+          break;
+          }
+              
+            con.query(sql, (err, result, fields) => {
+              outJSON.countPO = inJSON.countPO
+              outJSON.nextPO = inJSON.nextPO
+              if (!err) {
+                if (result.length > 0) {
+                  
+                 // outJSON.ordenesr = result
+                  result.forEach(e => {
+                    e.dateUp = new Date(e.dateUp)
+                    //e.dateUp = new Date(e.dateUp - tzoffset)
+                    outJSON.dataTable.push({
+                      key: `${e.CTA}${outJSON.i}r`,
+                      cta: e.CTA,
+                      idOrden: e.idOrden,
+                      NOMBRE: e.contribuyente,
+                      tp: 'RUSTICO',
+                      fecha: new Date(e.dateUp - tzoffset).toISOString().slice(0, -1),
+                      total: e.total,
+                      terreno: e.m1,
+                      construccion: e.m2
+                    });
+                    
+                    if (e.dateUp.getDate() < 10) {
+                      e.dateUp = `0${e.dateUp.toLocaleDateString()}`
+                    } else {
+                      e.dateUp = e.dateUp.toLocaleDateString()
+                    }
+                    outJSON.i++
+                    if ((dateLast !== '' && e.dateUp !== dateLast) || outJSON.i === result.length) {
+                      if (outJSON.i === result.length){
+                        outJSON.totalD += parseInt(e.total);
+                      }
+                      
+                      if (outJSON.objects[`${dateLast}`]) {
+                        outJSON.objects[`${dateLast}`] += outJSON.totalD
+                      }else{
+                        outJSON.objects[`${dateLast}`] = outJSON.totalD
+                      }
+                      outJSON.totalD = 0
+                    }
+                    dateLast = e.dateUp
+                    outJSON.total += parseInt(e.total); 
+                    outJSON.totalD += parseInt(e.total);
+              });
+                setResponse(res, outJSON,con)
+                } else {
+                  outJSON.error.name = 'error02';
+                  outJSON.ordenesr = []
+                  inJSON.countPO=new Date(inJSON.countPO)
+                  inJSON.countPO.setDate(inJSON.countPO.getDate()+7);
+                  inJSON.nextPO = new Date(inJSON.countPO);
+                  inJSON.nextPO.setDate(inJSON.nextPO.getDate()+7);
+                  inJSON.countPO.setHours(0,0,0,0)
+                  inJSON.nextPO.setHours(0,0,0,0)
+                  inJSON.countPO=inJSON.countPO.toISOString();
+                  inJSON.nextPO=inJSON.nextPO.toISOString();
+                  if((new Date(inJSON.nextPO))<(new Date(inJSON.ff))){
+                    getOrdenO(inJSON,outJSON,con,res)
+                  } else if ((new Date(inJSON.nextPO))>(new Date(inJSON.ff))) {
+              //     inJSON.countPU=new Date(inJSON.countPU)
+            //       inJSON.countPU.setDate(inJSON.countPU.getDate()-8);
+                    inJSON.nextPO = new Date(inJSON.ff);
+                    inJSON.nextPO=inJSON.nextPO.toISOString();
+                //   inJSON.countPU=inJSON.countPU.toISOString();
+                    if ((new Date(inJSON.countPO))<(new Date(inJSON.ff))) {
+                      getOrdenO(inJSON,outJSON,con,res)
+                    }else{
+                      setResponse(res, outJSON,con)
+                    }
+                      
+                  }else{
+                    setResponse(res, outJSON,con)
+                  }  
+                }
+          
+
+              } else {
+              }
+              
+            });
+          }else{
+            setResponse(res, outJSON,con)
+          }
+
+      
+}
+
 const getOrdenR = (inJSON,outJSON,con,res) =>{
         let dateLast = '';
         let tzoffset = (new Date()).getTimezoneOffset() * 60000;
@@ -280,7 +399,7 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
                     outJSON.total += parseInt(e.total); 
                     outJSON.totalD += parseInt(e.total);
               });
-                setResponse(res, outJSON,con)
+getOrdenO(inJSON,outJSON,con,res)
                 } else {
                   outJSON.error.name = 'error02';
                   outJSON.ordenesr = []
@@ -303,11 +422,11 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
                     if ((new Date(inJSON.countPR))<(new Date(inJSON.ff))) {
                       getOrdenR(inJSON,outJSON,con,res)
                     }else{
-                      setResponse(res, outJSON,con)
+                      getOrdenO(inJSON,outJSON,con,res)
                     }
                       
                   }else{
-                    setResponse(res, outJSON,con)
+                    getOrdenO(inJSON,outJSON,con,res)
                   }  
                 }
           
@@ -395,7 +514,8 @@ const getLength = (req, res) => {
         let subquery = ``;
         sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}')`
         sql += ` ORDER by o.dateUp ASC`;
-
+        /*console.log("obtenerOF")
+        console.log(sql)*/
         switch(inJSON.op){
           case 1: 
             subquery = "o.CTA="+inJSON.CTA
@@ -511,7 +631,66 @@ const getLength = (req, res) => {
                     outJSON.totalD += parseInt(e.total);
               });
               }
+              sql = `SELECT * FROM ordenes o WHERE `
+            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}')`
+            sql += ` ORDER by o.dateUp ASC`;
+            switch(inJSON.op){
+          case 1: 
+            subquery = "o.CTA="+inJSON.CTA
+            sql = `SELECT * FROM ordenes o WHERE ${subquery}`
+            sql += ` `
+            sql += `ORDER by o.dateUp ASC`
+          
+          break;
+          case 2: 
+            subquery = "o.nombre LIKE '%"+inJSON.CTA+`%'`
+            sql = `SELECT * FROM ordenes o WHERE `
+            sql += ` ${subquery} `
+            sql += `ORDER by o.dateUp ASC`
+          
+          break;
+          case 3: 
+            subquery = "f.idFolio="+inJSON.CTA+` AND o.idOrden=f.idOrden`
+            sql = `SELECT * FROM ordenes o, folios f WHERE `
+            sql += ` ${subquery} `
+            sql += `ORDER by o.dateUp ASC`
+          
+          break;
+          }
+outJSON.i=0
+            outJSON.totalD=0
+            dateLast = ''
+            con.query(sql, (err, result, fields) => {
+              if(result&&result.length>0){
+                outJSON.lengthO=result.length
+                result.forEach(e => {
+                    e.dateUp = new Date(e.dateUp)
+                    
+                    if (e.dateUp.getDate() < 10) {
+                      e.dateUp = `${e.dateUp.toLocaleDateString()}`
+                    } else {
+                      e.dateUp = e.dateUp.toLocaleDateString()
+                    }
+                    outJSON.i++
+                    if ((dateLast !== '' && e.dateUp !== dateLast) || outJSON.i === result.length) {
+                      if (outJSON.i === result.length){
+                        outJSON.totalD += parseInt(e.total);
+                      }
+                      
+                      if (outJSON.objects[`${dateLast}`]) {
+                        outJSON.objects[`${dateLast}`] += outJSON.totalD
+                      }else{
+                        outJSON.objects[`${dateLast}`] = outJSON.totalD
+                      }
+                      outJSON.totalD = 0
+                    }
+                    dateLast = e.dateUp
+                    outJSON.total += parseInt(e.total); 
+                    outJSON.totalD += parseInt(e.total);
+              });
               
+              }
+
               const objects = Object.entries(outJSON.objects)//.sort();
              // console.log(objects)
               
@@ -598,7 +777,7 @@ const getLength = (req, res) => {
                 }
                 
               }
-              outJSON.lengthUR = outJSON.lengthU + outJSON.lengthR;
+              outJSON.lengthUR = outJSON.lengthU + outJSON.lengthR+outJSON.lengthO;
               const media = outJSON.total/outJSON.lengthUR
               outJSON.porcentaje2 = outJSON.total / outJSON.porcentaje
               outJSON.porcentaje2 = (outJSON.porcentaje2 / outJSON.total) * 100
@@ -615,6 +794,7 @@ const getLength = (req, res) => {
               
               setResponse(res, outJSON, con);
               
+              });
             });
           
         });
