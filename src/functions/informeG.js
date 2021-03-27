@@ -47,7 +47,7 @@ const round = (num, decimales = 2) => {
           data.porcentajeT = round((data.porcentajeU + data.porcentajeR) / 2)*/
                             
             let sql = `SELECT * FROM ordenesu o, predialu pr WHERE `
-            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') `
+            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}') `
             sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
            /* console.log("informeG")
             console.log(sql)*/
@@ -114,7 +114,7 @@ const round = (num, decimales = 2) => {
                         outJSON.ordenesu = []
                     }
                     sql = `SELECT * FROM ordenesr o, predialr pr WHERE `
-                    sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') `
+                    sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}') `
                     sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
 
                     con.query(sql, (err, result, fields) => {
@@ -185,7 +185,7 @@ const round = (num, decimales = 2) => {
                                 outJSON.ordenesr = []
                             }
                                 sql = `SELECT * FROM ordenes o, formas f WHERE `
-                                    sql += `o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}'`
+                                    sql += `o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}'`
                                     sql += `AND f.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
 
                                     con.query(sql, (err, result, fields) => {
