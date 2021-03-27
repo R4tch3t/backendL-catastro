@@ -48,7 +48,7 @@ const round = (num, decimales = 2) => {
                             
             let sql = `SELECT * FROM ordenesu o, predialu pr WHERE `
             sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}') `
-            sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
+            sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC, pr.idImpuesto ASC`
            /* console.log("informeG")
             console.log(sql)*/
             con.query(sql, (err, result, fields) => {
@@ -115,7 +115,7 @@ const round = (num, decimales = 2) => {
                     }
                     sql = `SELECT * FROM ordenesr o, predialr pr WHERE `
                     sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}') `
-                    sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
+                    sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC, pr.idImpuesto ASC`
 
                     con.query(sql, (err, result, fields) => {
                         if (!err) {

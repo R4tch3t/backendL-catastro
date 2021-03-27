@@ -209,9 +209,9 @@ const getOrdenO = (inJSON,outJSON,con,res) =>{
         const {countPO,nextPO} = inJSON; 
         if(new Date(countPO)<new Date(nextPO)||(inJSON.op>0&&inJSON.op<4)){
         let subquery = '';
-        let sql = `SELECT * FROM ordenes o WHERE `
+        let sql = `SELECT * FROM ordenes o, folios f WHERE `
           sql += `(o.dateUp>='${countPO}' AND o.dateUp<'${nextPO}') ${subquery} `
-          sql += `ORDER by o.dateUp ASC`
+          sql += `AND f.idOrden=o.idOrden AND f.tp='f' ORDER by o.dateUp ASC`
         switch(inJSON.op){
           case 1: 
             subquery = "o.CTA="+inJSON.CTA
@@ -246,11 +246,11 @@ const getOrdenO = (inJSON,outJSON,con,res) =>{
                     e.dateUp = new Date(e.dateUp)
                     //e.dateUp = new Date(e.dateUp - tzoffset)
                     outJSON.dataTable.push({
-                      key: `${e.CTA}${outJSON.i}r`,
-                      cta: e.CTA,
+                      key: `${e.idFolio}${outJSON.i}f`,
+                      cta: e.idFolio,
                       idOrden: e.idOrden,
-                      NOMBRE: e.contribuyente,
-                      tp: 'RUSTICO',
+                      NOMBRE: e.nombre,
+                      tp: 'FORMA',
                       fecha: new Date(e.dateUp - tzoffset).toISOString().slice(0, -1),
                       total: e.total,
                       terreno: e.m1,

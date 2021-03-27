@@ -29,6 +29,7 @@ insertForma = (inJSON,outJSON,res,con) => {
             let c = 0;
             outJSON.idOrden = result[0].idOrden
             outJSON.dateUp = result[0].dateUp
+            outJSON.idMov = 1
             sql = `INSERT INTO folios(idOrden, tp) VALUES (${outJSON.idOrden},'${inJSON.tp}')`
             con.query(sql, (err, result) => {
               outJSON.folio = result.insertId
@@ -99,6 +100,7 @@ const _registrarF = (req, res) => {
           }else{
             sql = `UPDATE ordenes SET nombre='${inJSON.nombre}',total='${inJSON.total}',dateUp='${inJSON.dateUp}' `
             sql += `WHERE idOrden=${inJSON.idOrden} `
+            outJSON.idMov = 2
             con.query(sql, (err, result, fields) => {
               let c = 0;
               if (inJSON.removI.length === 0) {
