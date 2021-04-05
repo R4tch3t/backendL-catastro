@@ -568,6 +568,7 @@ const getLength = (req, res) => {
                   outJSON.total += parseInt(e.total); 
                   outJSON.totalD += parseInt(e.total);
             });
+            console.log(outJSON);
           }  
       //      console.log(result)
           
@@ -600,11 +601,13 @@ const getLength = (req, res) => {
             outJSON.i=0
             outJSON.totalD=0
             dateLast = ''
+            let totalL = 0
             con.query(sql, (err, result, fields) => {
               if(result&&result.length>0){
                 outJSON.lengthR = result.length;
   //              outJSON.countPR = result[0].dateUp;
 //                outJSON.nextPR = result[result.length<50?(result.length-1):50].dateUp
+                console.log(result)
                 result.forEach(e => {
                     e.dateUp = new Date(e.dateUp)
                     
@@ -627,10 +630,14 @@ const getLength = (req, res) => {
                       outJSON.totalD = 0
                     }
                     dateLast = e.dateUp
-                    outJSON.total += parseInt(e.total); 
+                    outJSON.total += parseInt(e.total);
+                    totalL += parseInt(e.total); 
                     outJSON.totalD += parseInt(e.total);
               });
               }
+              console.log(totalL)
+              console.log(outJSON)
+              totalL = 0
               sql = `SELECT * FROM ordenes o WHERE `
             sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}')`
             sql += ` ORDER by o.dateUp ASC`;
@@ -686,11 +693,13 @@ outJSON.i=0
                     }
                     dateLast = e.dateUp
                     outJSON.total += parseInt(e.total); 
+                    totalL += parseInt(e.total); 
                     outJSON.totalD += parseInt(e.total);
               });
               
               }
-
+              console.log(totalL)
+              console.log(outJSON)
               const objects = Object.entries(outJSON.objects)//.sort();
              // console.log(objects)
               

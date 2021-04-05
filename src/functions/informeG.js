@@ -98,9 +98,13 @@ const round = (num, decimales = 2) => {
                         case 18:
                         case 19:
                             if(data.isAlta){
-                            data.totalA += parseInt(e.val)
-                            const q = Math.round(parseInt(e.val) * 0.15)
-                            data.totalA += q * 2
+                                data.totalA += parseInt(e.val)
+                                const q = Math.round(parseInt(e.val) * 0.15)
+                                data.totalA += q * 2
+                            }else{
+                                data.totalPU += parseInt(e.val)
+                                const q = Math.round(parseInt(e.val) * 0.15)
+                                data.totalPU += q * 2
                             }
                         
                         break;
@@ -167,9 +171,13 @@ const round = (num, decimales = 2) => {
               case 18:
               case 19:
                 if(data.isAlta){
-                  data.totalA += parseInt(e.val)
-                  const q = Math.round(parseInt(e.val) * 0.15)
-                  data.totalA += q * 2
+                    data.totalA += parseInt(e.val)
+                    const q = Math.round(parseInt(e.val) * 0.15)
+                    data.totalA += q * 2
+                }else{
+                    data.totalPR += parseInt(e.val)
+                    const q = Math.round(parseInt(e.val) * 0.15)
+                    data.totalPR += q * 2
                 }
                 
                 break;
@@ -180,7 +188,8 @@ const round = (num, decimales = 2) => {
             }*/
 
           });
-          } else {
+         
+        } else {
                                 outJSON.error.name = 'error02';
                                 outJSON.ordenesr = []
                             }

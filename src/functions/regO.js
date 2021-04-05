@@ -77,14 +77,45 @@ if (inJSON.dateUp === '') {
     });
 }
 
-const checkUbi = (inJSON, outJSON, res, con) => {
-  
-                        let  sql = `UPDATE padron${inJSON.tp} SET m1='${inJSON.m1}', m2='${inJSON.m2}', tc='${inJSON.tc}', `
-                          sql += `zona='${inJSON.zona}', bg='${inJSON.bg}', `
-                          sql += `observaciones='${inJSON.obs}' WHERE CTA=${inJSON.CTA}`
-                          con.query(sql, (err, result, fields) => {
+const checkPadron = (inJSON, outJSON, res, con) => {
+  let sql = `SELECT * FROM padron${inJSON.tp}`
+    sql += ` WHERE CTA=${inJSON.CTA}`
+    con.query(sql, (err, result, fields) => {
+      if(!err){
+          if(result.length>0){
 
-          sql = `SELECT * FROM ubipredio${inJSON.tp} WHERE CTA=${inJSON.CTA}`;
+            sql = `UPDATE padron${inJSON.tp} SET contribuyente='${inJSON.contribuyente}', m1='${inJSON.m1}', m2='${inJSON.m2}', tc='${inJSON.tc}', `
+            sql += `zona='${inJSON.zona}', bg='${inJSON.bg}', `
+            sql += `observaciones='${inJSON.obs}' WHERE CTA=${inJSON.CTA}`
+            
+            con.query(sql, (err, result, fields) => {
+              //if(!err&&result){
+                checkUbi(inJSON, outJSON, res, con);
+             // }
+            });
+
+          }else{
+            sql = `INSERT INTO padron${inJSON.tp}(CTA, contribuyente, ubicacion, m1, m2, tc, zona, bg, observaciones, periodo, escriturasPath) `
+            sql += `VALUES (${inJSON.CTA},'${inJSON.contribuyente}','','${inJSON.m1}','${inJSON.m2}'`
+            sql += `,'${inJSON.tc}','${inJSON.zona}','${inJSON.bg}','${inJSON.obs}','${inJSON.periodo}','')`
+            con.query(sql, (err, result, fields) => {
+
+              if(!err){
+                checkUbi(inJSON, outJSON, res, con);
+              }else{
+                setResponse(res,outJSON,con);
+              }
+
+            });
+          }
+        }
+      
+    });
+}
+
+const checkUbi = (inJSON, outJSON, res, con) => {
+
+          let sql = `SELECT * FROM ubipredio${inJSON.tp} WHERE CTA=${inJSON.CTA}`;
           con.query(sql, (err, result, fields) => {
 
             if (!err) {
@@ -228,8 +259,6 @@ const checkUbi = (inJSON, outJSON, res, con) => {
             }
 
           })
-        })
-
 }
 
 const _regO = (req, res) => {
@@ -251,14 +280,19 @@ const _regO = (req, res) => {
           console.log(`Error: ${err}`);
         } else {
           //getDataHistory
-          if(inJSON.changeN){
+          /*if(inJSON.changeN){
             let sql = `UPDATE padron${inJSON.tp} SET contribuyente='${inJSON.contribuyente}' WHERE CTA=${inJSON.CTA}`;
             con.query(sql, (err, result, fields) => {
               checkUbi(inJSON, outJSON, res, con);
             });
-          }else{
-            checkUbi(inJSON, outJSON, res, con);
-          }
+          }else{*/
+
+            if (!inJSON.CTA) {
+              inJSON.CTA = inJSON.CTAnombre
+            }
+            checkPadron(inJSON, outJSON, res, con);
+
+          //}
           //console.log("Connected!");
 
         }
@@ -270,8 +304,8 @@ const _regO = (req, res) => {
 
 const regO = (req, res) => {
         try {
-            const {CTA} = req.body
-                   if (CTA) {
+            const {CTA,CTAnombre} = req.body
+                   if (CTA||CTAnombre) {
 
                         _regO(req, res)
 

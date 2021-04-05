@@ -129,6 +129,30 @@ const _padrones = (req, res) => {
 
                                 });
                             } else {
+                                outJSON.contribuyente = [{
+                                                CTA: inJSON.CTA,
+                                                contribuyente: '',
+                                                ubicacion: '',
+                                                m1: 0,
+                                                m2: '',
+                                                tc: 0,
+                                                zona: '',
+                                                bg: '',
+                                                observaciones: '',
+                                                periodo: '',
+                                                escriturasPath: ''
+                                }]
+                                outJSON.ubicacion = [{
+                                                calle: '',
+                                                lote: 0,
+                                                manzana: '',
+                                                numero: 0,
+                                                colonia: '',
+                                                cp: 0,
+                                                municipio: '',
+                                                localidad: '',
+                                                basegrav: 0
+                                }]
                                 outJSON.error.name = 'error01'
                                 setResponse(res, outJSON,con)
                             }
