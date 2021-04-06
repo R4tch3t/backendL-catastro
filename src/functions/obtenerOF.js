@@ -567,7 +567,6 @@ const getLength = (req, res) => {
                   outJSON.total += parseInt(e.total); 
                   outJSON.totalD += parseInt(e.total);
                   outJSON.totalU += parseInt(e.total);
-                  totalL += parseInt(e.total);
             });
 
           }  
