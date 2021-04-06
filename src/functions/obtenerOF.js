@@ -504,7 +504,7 @@ const getLength = (req, res) => {
       outJSON.porcentaje2 = 0;
       outJSON.objects = {}
       outJSON.labels = []
-      outJSON.totales = []
+      outJSON.totales = [];
       if (err) {
         console.log(`Err on con: ${err}`);
         
@@ -512,10 +512,9 @@ const getLength = (req, res) => {
         //let sql = `SELECT * FROM padronu pu WHERE pu.contribuyente NOT LIKE '%LIBRE%' AND pu.contribuyente!='' ORDER by pu.CTA DESC`
         let sql = `SELECT * FROM ordenesu o WHERE `
         let subquery = ``;
-        sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}')`
+        sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}')`
         sql += ` ORDER by o.dateUp ASC`;
-        /*console.log("obtenerOF")
-        console.log(sql)*/
+        /*console.log("obtenerOF")*/
         switch(inJSON.op){
           case 1: 
             subquery = "o.CTA="+inJSON.CTA
@@ -539,14 +538,14 @@ const getLength = (req, res) => {
           
           break;
           }
-          
+          outJSON.totalU = 0;
         con.query(sql, (err, result, fields) => {
           if(result&&result.length>0){
             outJSON.lengthU = result.length
           //  outJSON.countPU = result[0].dateUp
          //   outJSON.nextPU = result[result.length<50?(result.length-1):50].dateUp
            // outJSON.ordenesu = result
-
+            
             result.forEach(e => { 
                   e.dateUp = new Date(e.dateUp)
                   
@@ -567,13 +566,14 @@ const getLength = (req, res) => {
                   dateLast = e.dateUp
                   outJSON.total += parseInt(e.total); 
                   outJSON.totalD += parseInt(e.total);
+                  outJSON.totalU += parseInt(e.total);
+                  totalL += parseInt(e.total);
             });
-            console.log(outJSON);
+
           }  
-      //      console.log(result)
           
             sql = `SELECT * FROM ordenesr o WHERE `
-            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}')`
+            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}')`
             sql += ` ORDER by o.dateUp ASC`;
             switch(inJSON.op){
           case 1: 
@@ -600,14 +600,14 @@ const getLength = (req, res) => {
           }
             outJSON.i=0
             outJSON.totalD=0
+            outJSON.totalR = 0;
             dateLast = ''
-            let totalL = 0
             con.query(sql, (err, result, fields) => {
               if(result&&result.length>0){
                 outJSON.lengthR = result.length;
   //              outJSON.countPR = result[0].dateUp;
 //                outJSON.nextPR = result[result.length<50?(result.length-1):50].dateUp
-                console.log(result)
+                
                 result.forEach(e => {
                     e.dateUp = new Date(e.dateUp)
                     
@@ -631,15 +631,12 @@ const getLength = (req, res) => {
                     }
                     dateLast = e.dateUp
                     outJSON.total += parseInt(e.total);
-                    totalL += parseInt(e.total); 
                     outJSON.totalD += parseInt(e.total);
+                    outJSON.totalR += parseInt(e.total);
               });
               }
-              console.log(totalL)
-              console.log(outJSON)
-              totalL = 0
               sql = `SELECT * FROM ordenes o WHERE `
-            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}')`
+            sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}')`
             sql += ` ORDER by o.dateUp ASC`;
             switch(inJSON.op){
           case 1: 
@@ -693,13 +690,10 @@ outJSON.i=0
                     }
                     dateLast = e.dateUp
                     outJSON.total += parseInt(e.total); 
-                    totalL += parseInt(e.total); 
                     outJSON.totalD += parseInt(e.total);
               });
               
               }
-              console.log(totalL)
-              console.log(outJSON)
               const objects = Object.entries(outJSON.objects)//.sort();
              // console.log(objects)
               

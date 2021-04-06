@@ -42,6 +42,7 @@ const round = (num, decimales = 2) => {
           data.total = 0
           data.aux = 0
           data.isAlta = false
+          data.bandRest = false
           /*data.porcentajeU = round(outJSON.countU / outJSON.lengthU * 100)
           data.porcentajeR = round(outJSON.countR / outJSON.lengthR * 100)
           data.porcentajeT = round((data.porcentajeU + data.porcentajeR) / 2)*/
@@ -56,8 +57,17 @@ const round = (num, decimales = 2) => {
                     if (result.length > 0) {
                         //outJSON.ordenesu = result
                         outJSON.lengthU=result.length
+                        data.totalAU = 0
+                        //outJSON.totalAU = 0
                         result.forEach(e=>{
-                               
+                               /*if (idOrden !== e.idOrden) {
+                                     data.totalPU += parseInt(e.total);
+                               }
+                               idOrden=e.idOrden
+                               if(data.bandRest){
+                                   data.bandRest = false;
+                                   data.totalPU -= parseInt(e.total);
+                               }*/
                         switch (e.idImpuesto) {
                         case 1:
                         case 2:
@@ -73,8 +83,11 @@ const round = (num, decimales = 2) => {
                             break;
                         case 8:
                             data.isAlta = true;
+                         //   data.bandRest = true;
                             data.totalA += data.aux
                             data.totalA += parseInt(e.val)
+                            data.totalAU += data.aux
+                            data.totalAU += parseInt(e.val)
                             break;
                         case 10:
                         case 11:
@@ -83,11 +96,12 @@ const round = (num, decimales = 2) => {
                         //data.aux += parseInt(e.val)
                         if (data.isAlta){
                             data.totalA += parseInt(e.val)
+                            data.totalAU += parseInt(e.val)
                         }else{
 
                             //if (idOrden !== e.idOrden) {
-                            data.totalPU += parseInt(e.val);
-                            data.totalPU += data.aux;
+                           // data.totalPU += parseInt(e.val);
+                          //  data.totalPU += data.aux;
                             data.aux = 0
                         // }
 
@@ -101,18 +115,20 @@ const round = (num, decimales = 2) => {
                                 data.totalA += parseInt(e.val)
                                 const q = Math.round(parseInt(e.val) * 0.15)
                                 data.totalA += q * 2
-                            }else{
+                                data.totalAU += parseInt(e.val)
+                                data.totalAU += q * 2
+                            }/*else{
                                 data.totalPU += parseInt(e.val)
                                 const q = Math.round(parseInt(e.val) * 0.15)
                                 data.totalPU += q * 2
-                            }
+                            }*/
                         
                         break;
                         }
                                 
                             });
                             
-
+                        data.totalPU = parseInt(inJSON.totalU) - data.totalAU
                     } else {
                         outJSON.error.name = 'error01';
                         outJSON.ordenesu = []
@@ -126,7 +142,17 @@ const round = (num, decimales = 2) => {
                             if (result.length > 0) {
                                 outJSON.lengthR=result.length
                                  idOrden=0
+                                 //data.bandRest = false;
+                                 data.totalAR=0
           result.forEach(e => {
+             /* if (idOrden !== e.idOrden) {
+                                     data.totalPR += parseInt(e.total);
+                               }
+                               idOrden=e.idOrden
+                               if(data.bandRest){
+                                   data.bandRest = false;
+                                   data.totalPR -= parseInt(e.total);
+                                }*/
             switch (e.idImpuesto) {
               case 1:
               case 2:
@@ -142,8 +168,12 @@ const round = (num, decimales = 2) => {
                 break;
               case 8:
                 data.isAlta = true
+              //  data.bandRest = true;
                 data.totalA += data.aux
                 data.totalA += parseInt(e.val)
+                data.totalAR += data.aux
+                data.totalAR += parseInt(e.val)
+                
                 break;
               case 10:
               case 11:
@@ -151,11 +181,12 @@ const round = (num, decimales = 2) => {
               case 13:
               if (data.isAlta){
                 data.totalA += parseInt(e.val)
+                data.totalAR += parseInt(e.val)
               } else {
 
                // if (idOrden !== e.idOrden) {
-                data.totalPR += parseInt(e.val);
-                data.totalPR += data.aux;
+              //  data.totalPR += parseInt(e.val);
+               // data.totalPR += data.aux;
                 data.aux = 0
                // idOrden = e.idOrden;
                // }
@@ -174,11 +205,14 @@ const round = (num, decimales = 2) => {
                     data.totalA += parseInt(e.val)
                     const q = Math.round(parseInt(e.val) * 0.15)
                     data.totalA += q * 2
-                }else{
+                    data.totalAR += parseInt(e.val)
+                    data.totalAR += q * 2
+
+                }/*else{
                     data.totalPR += parseInt(e.val)
                     const q = Math.round(parseInt(e.val) * 0.15)
                     data.totalPR += q * 2
-                }
+                }*/
                 
                 break;
             }
@@ -188,14 +222,15 @@ const round = (num, decimales = 2) => {
             }*/
 
           });
+          data.totalPR = parseInt(inJSON.totalR) - data.totalAR;
          
         } else {
                                 outJSON.error.name = 'error02';
                                 outJSON.ordenesr = []
                             }
-                                sql = `SELECT * FROM ordenes o, formas f WHERE `
+                                sql = `SELECT * FROM ordenes o WHERE `
                                     sql += `o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}'`
-                                    sql += `AND f.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
+                                    sql += ` ORDER by o.dateUp ASC, o.idOrden ASC`
 
                                     con.query(sql, (err, result, fields) => {
                                         if (!err) {

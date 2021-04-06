@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "./static/css/main.c100fddc.chunk.css",
-    "main.js": "./static/js/main.e71236a8.chunk.js",
+    "main.js": "./static/js/main.7604b199.chunk.js",
     "runtime~main.js": "./static/js/runtime~main.3451b984.js",
     "static/css/2.c4baed5b.chunk.css": "./static/css/2.c4baed5b.chunk.css",
     "static/js/2.f3287bc1.chunk.js": "./static/js/2.f3287bc1.chunk.js",
     "index.html": "./index.html",
-    "precache-manifest.a771a8459638c99734035a6c2ae90d58.js": "./precache-manifest.a771a8459638c99734035a6c2ae90d58.js",
+    "precache-manifest.17c6664fa03c97419973bc5cb1b0e50c.js": "./precache-manifest.17c6664fa03c97419973bc5cb1b0e50c.js",
     "service-worker.js": "./service-worker.js",
     "static/media/chilapa.png": "./static/media/chilapa.ad6e07fd.png",
     "static/media/cintillo.jpeg": "./static/media/cintillo.e47f062d.jpeg",
