@@ -134,12 +134,13 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
         
          break;
         }
-        
+        console.log(sql)
         
         con.query(sql, (err, result, fields) => {
           outJSON.countPU = inJSON.countPU
           outJSON.nextPU = inJSON.nextPU
           if (!err) {
+            console.log(result.length)
             if(result.length>0){
               
              // outJSON.ordenesu = result
@@ -399,7 +400,7 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
                     outJSON.total += parseInt(e.total); 
                     outJSON.totalD += parseInt(e.total);
               });
-getOrdenO(inJSON,outJSON,con,res)
+                  getOrdenO(inJSON,outJSON,con,res)
                 } else {
                   outJSON.error.name = 'error02';
                   outJSON.ordenesr = []
@@ -438,9 +439,9 @@ getOrdenO(inJSON,outJSON,con,res)
           }else{
             setResponse(res, outJSON,con)
           }
-
       
 }
+
 const _obtenerOF = (req, res) => {
     //const {CTAnombre,tipoB,idOrden,tp} = req.body
     let outJSON = {}
@@ -487,6 +488,10 @@ const getLength = (req, res) => {
     let dateLabel = null;
     let dateLast = '';
     let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    inJSON.fi=new Date(new Date(inJSON.fi)-tzoffset);
+    inJSON.ff=new Date(new Date(inJSON.ff)-tzoffset);
+    inJSON.fi=inJSON.fi.toISOString();
+    inJSON.ff=inJSON.ff.toISOString();
     let con = mysql.createConnection({
         host: "localhost",
         user: process.env.NODE_MYSQL_USER,
@@ -505,6 +510,9 @@ const getLength = (req, res) => {
       outJSON.objects = {}
       outJSON.labels = []
       outJSON.totales = [];
+      outJSON.lengthR=0;
+      outJSON.lengthU=0;
+      outJSON.lengthO=0;
       if (err) {
         console.log(`Err on con: ${err}`);
         
@@ -539,13 +547,15 @@ const getLength = (req, res) => {
           break;
           }
           outJSON.totalU = 0;
+          console.log(sql);
         con.query(sql, (err, result, fields) => {
           if(result&&result.length>0){
             outJSON.lengthU = result.length
+            console.log(result)
+            console.log(result.length)
           //  outJSON.countPU = result[0].dateUp
          //   outJSON.nextPU = result[result.length<50?(result.length-1):50].dateUp
            // outJSON.ordenesu = result
-            
             result.forEach(e => { 
                   e.dateUp = new Date(e.dateUp)
                   
@@ -604,6 +614,7 @@ const getLength = (req, res) => {
             con.query(sql, (err, result, fields) => {
               if(result&&result.length>0){
                 outJSON.lengthR = result.length;
+                console.log(result.length)
   //              outJSON.countPR = result[0].dateUp;
 //                outJSON.nextPR = result[result.length<50?(result.length-1):50].dateUp
                 
@@ -666,6 +677,7 @@ outJSON.i=0
             con.query(sql, (err, result, fields) => {
               if(result&&result.length>0){
                 outJSON.lengthO=result.length
+                console.log(result.length)
                 result.forEach(e => {
                     e.dateUp = new Date(e.dateUp)
                     
@@ -793,7 +805,7 @@ outJSON.i=0
                 outJSON.porcentaje = round(outJSON.porcentaje, 4)
               
               }
-              
+              console.log(outJSON.lengthUR)
               setResponse(res, outJSON, con);
               
               });
