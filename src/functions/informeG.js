@@ -46,12 +46,25 @@ const round = (num, decimales = 2) => {
           /*data.porcentajeU = round(outJSON.countU / outJSON.lengthU * 100)
           data.porcentajeR = round(outJSON.countR / outJSON.lengthR * 100)
           data.porcentajeT = round((data.porcentajeU + data.porcentajeR) / 2)*/
-                            
+            inJSON.fi=new Date(inJSON.fi)
+            inJSON.ff=new Date(inJSON.ff)
+            if(inJSON.fi.getMonth()>2&&inJSON.fi.getMonth()<10){
+                inJSON.fi.setHours(-5,0,0,0)
+            }else{
+                inJSON.fi.setHours(-6,0,0,0)
+            }
+            if(inJSON.ff.getMonth()>2&&inJSON.ff.getMonth()<10){
+                inJSON.ff.setHours(-5,0,0,0)
+            }else{
+                inJSON.ff.setHours(-6,0,0,0)
+            }
+            inJSON.fi=inJSON.fi.toISOString()       
+            inJSON.ff=inJSON.ff.toISOString()       
             let sql = `SELECT * FROM ordenesu o, predialu pr WHERE `
             sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<'${inJSON.ff}') `
             sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC, pr.idImpuesto ASC`
-           /* console.log("informeG")
-            console.log(sql)*/
+           /**/ console.log("informeG")
+            console.log(sql)
             con.query(sql, (err, result, fields) => {
                 if (!err) {
                     if (result.length > 0) {

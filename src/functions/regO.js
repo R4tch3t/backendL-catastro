@@ -18,20 +18,27 @@ const setResponse = (res, outJSON,con) => {
 }
 
 insertOrden = (inJSON, outJSON,res, con) => {
-
+//const dVerano = new Date();
+const d = new Date();
 if (inJSON.dateUp === '') {
-  const d = new Date();
-  d.setHours(d.getHours()-6);
+  
+  //dVerano.setMonth(3)
+  //dVerano.setDate(4)
+  if(d.getMonth()>2&&d.getMonth()<10){
+    d.setHours(d.getHours()+1);
+  }//else{
+    d.setHours(d.getHours()-6);
+  //}
       sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs,dateUp) VALUES `
       sql += `(${inJSON.CTA},'${inJSON.contribuyente}','${inJSON.m1}','${inJSON.m2}',`
       sql += `'${inJSON.tc}','${inJSON.zona}','${inJSON.bg}',`
       sql += `'${inJSON.periodo}','${inJSON.total}','${inJSON.idEmpleado}','${inJSON.labelConsta}','${inJSON.otroservicio}','${inJSON.labelCerti}','${inJSON.obs}','${d.toISOString()}')`;
-    } else {
-      sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs,dateUp) VALUES `
-      sql += `(${inJSON.CTA}, '${inJSON.contribuyente}','${inJSON.m1}','${inJSON.m2}',`
-      sql += `'${inJSON.tc}','${inJSON.zona}','${inJSON.bg}',`
-      sql += `'${inJSON.periodo}','${inJSON.total}','${inJSON.idEmpleado}','${inJSON.labelConsta}','${inJSON.otroservicio}','${inJSON.labelCerti}','${inJSON.obs}','${inJSON.dateUp}')`;
-    }
+  } else {
+    sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs,dateUp) VALUES `
+    sql += `(${inJSON.CTA}, '${inJSON.contribuyente}','${inJSON.m1}','${inJSON.m2}',`
+    sql += `'${inJSON.tc}','${inJSON.zona}','${inJSON.bg}',`
+    sql += `'${inJSON.periodo}','${inJSON.total}','${inJSON.idEmpleado}','${inJSON.labelConsta}','${inJSON.otroservicio}','${inJSON.labelCerti}','${inJSON.obs}','${inJSON.dateUp}')`;
+  }
     con.query(sql, (err, result, fields) => {
       if (!err) {
         sql = `SELECT * FROM ordenes${inJSON.tp} WHERE CTA=${inJSON.CTA} AND periodo='${inJSON.periodo}' ORDER by idOrden DESC`
@@ -41,8 +48,15 @@ if (inJSON.dateUp === '') {
           outJSON.dateUp = result[0].dateUp
           outJSON.dateUpL = new Date(outJSON.dateUp).toLocaleString();
           outJSON.dateUp = new Date(outJSON.dateUp)
-          outJSON.dateUp.setHours(outJSON.dateUp.getHours()-6) 
+          
+          if(outJSON.dateUp.getMonth()>2&&outJSON.dateUp.getMonth()<10){
+            outJSON.dateUp.setHours(outJSON.dateUp.getHours()+1) 
+          }//else{
+            outJSON.dateUp.setHours(outJSON.dateUp.getHours()-6)
+          //}
+          outJSON.dateUpV = outJSON.dateUp.toISOString()
           outJSON.dateUp = outJSON.dateUp.toISOString()
+           
           outJSON.idMov = "1"
           sql = `INSERT INTO folios(idOrden, tp) VALUES (${outJSON.idOrden},'${inJSON.tp}')`
           con.query(sql, (err, result) => {
@@ -168,15 +182,26 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                         let idOrden = result[0].idOrden
                         outJSON.idOrden = idOrden
                         let newDate = new Date(inJSON.dateUp)
+                        //const dVerano = new Date();
+                        const d = new Date();
                         //newDate.setHours(newDate.getHours()-6)
+                        outJSON.dateUpV = newDate.toISOString()
                         newDate = newDate.toISOString()
                         outJSON.dateUp = new Date(inJSON.dateUp)
                        // outJSON.dateUp.setHours(outJSON.dateUp.getHours()-6)
                         outJSON.dateUp = outJSON.dateUp.toISOString()
+                        
                         outJSON.dateUpL = new Date(outJSON.dateUp)//.toLocaleString();
+                        //dVerano.setMonth(3)
+                        //dVerano.setDate(4)
+                        if(outJSON.dateUpL.getMonth()>2&&outJSON.dateUpL.getMonth()<10){
+                          outJSON.dateUpL.setHours(outJSON.dateUpL.getHours()+1);
+                        }//else{
                         outJSON.dateUpL.setHours(outJSON.dateUpL.getHours()+6)
+                        
                         outJSON.dateUpL = outJSON.dateUpL.toLocaleString();
                         outJSON.idMov = "2"
+                        
                          
                         sql = `SELECT * FROM folios WHERE idOrden=${idOrden} AND tp='${inJSON.tp}'`
                         con.query(sql, (err, result, fields) => {

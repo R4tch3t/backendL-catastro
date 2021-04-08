@@ -97,10 +97,29 @@ const setNames = (res, inJSON, outJSON, con)=>{
 
 const getOrdenU = (inJSON,outJSON,con,res) =>{
         let dateLast = '';
-        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-        const {countPU,nextPU} = inJSON; 
-        if(new Date(countPU)<new Date(nextPU)||(inJSON.op>0&&inJSON.op<4)){
+         let {countPU,nextPU} = inJSON; 
+        const d = new Date()
+        let difHours = -6
+        if(d.getMonth()>2&&d.getMonth()<10){
+          difHours = -5
+        }
+        countPU = new Date(countPU)
+        nextPU = new Date(nextPU)
+
+        if(countPU.getMonth()>2&&countPU.getMonth()<10){
+           countPU.setHours(-5,0,0,0)
+        }else{
+            countPU.setHours(-6,0,0,0)
+        }
+        if(nextPU.getMonth()>2&&nextPU.getMonth()<10){
+            nextPU.setHours(-5,0,0,0)
+        }else{
+            nextPU.setHours(-6,0,0,0)
+        }
+        if(countPU<nextPU||(inJSON.op>0&&inJSON.op<4)){
         let subquery = '';
+        countPU=countPU.toISOString()
+        nextPU=nextPU.toISOString()
         let sql = `SELECT * FROM ordenesu o, padronu pa, ubiprediou u WHERE `
           sql += `(o.dateUp>='${countPU}' AND o.dateUp<'${nextPU}') ${subquery} `
           sql += `AND pa.CTA=o.CTA AND u.CTA=o.CTA ORDER by o.dateUp ASC`;
@@ -140,13 +159,18 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
           outJSON.countPU = inJSON.countPU
           outJSON.nextPU = inJSON.nextPU
           if (!err) {
-            console.log(result.length)
+           // console.log(result.length)
             if(result.length>0){
               
              // outJSON.ordenesu = result
               //setResponse()
                result.forEach(e => { 
                 e.dateUp = new Date(e.dateUp)
+                if(e.dateUp.getMonth()>2&&e.dateUp.getMonth()<10){
+                  e.dateUp.setHours(e.dateUp.getHours()-5)
+                }else{
+                  e.dateUp.setHours(e.dateUp.getHours()-6)
+                }
                 //e.dateUp = new Date(e.dateUp-tzoffset)
                 outJSON.dataTable.push({
                   key: `${e.CTA}${outJSON.i}u`,
@@ -154,7 +178,7 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
                   idOrden: e.idOrden,
                   NOMBRE: e.contribuyente,
                   tp: 'URBANO',
-                  fecha: new Date(e.dateUp - tzoffset).toISOString().slice(0, -1),
+                  fecha: e.dateUp.toISOString().slice(0, -1),
                   total: e.total,
                   terreno: e.m1,
                   construccion: e.m2
@@ -206,9 +230,24 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
 
 const getOrdenO = (inJSON,outJSON,con,res) =>{
         let dateLast = '';
-        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-        const {countPO,nextPO} = inJSON; 
-        if(new Date(countPO)<new Date(nextPO)||(inJSON.op>0&&inJSON.op<4)){
+        let {countPO,nextPO} = inJSON; 
+        
+        countPO = new Date(countPO)
+        nextPO = new Date(nextPO)
+
+        if(countPO.getMonth()>2&&countPO.getMonth()<10){
+           countPO.setHours(-5,0,0,0)
+        }else{
+            countPO.setHours(-6,0,0,0)
+        }
+        if(nextPO.getMonth()>2&&nextPO.getMonth()<10){
+            nextPO.setHours(-5,0,0,0)
+        }else{
+            nextPO.setHours(-6,0,0,0)
+        }
+        if(countPO<nextPO||(inJSON.op>0&&inJSON.op<4)){
+        countPO=countPO.toISOString()
+        nextPO=nextPO.toISOString()
         let subquery = '';
         let sql = `SELECT * FROM ordenes o, folios f WHERE `
           sql += `(o.dateUp>='${countPO}' AND o.dateUp<'${nextPO}') ${subquery} `
@@ -245,6 +284,11 @@ const getOrdenO = (inJSON,outJSON,con,res) =>{
                  // outJSON.ordenesr = result
                   result.forEach(e => {
                     e.dateUp = new Date(e.dateUp)
+                    if(e.dateUp.getMonth()>2&&e.dateUp.getMonth()<10){
+                      e.dateUp.setHours(e.dateUp.getHours()-5)
+                    }else{
+                      e.dateUp.setHours(e.dateUp.getHours()-6)
+                    }
                     //e.dateUp = new Date(e.dateUp - tzoffset)
                     outJSON.dataTable.push({
                       key: `${e.idFolio}${outJSON.i}f`,
@@ -252,7 +296,7 @@ const getOrdenO = (inJSON,outJSON,con,res) =>{
                       idOrden: e.idOrden,
                       NOMBRE: e.nombre,
                       tp: 'FORMA',
-                      fecha: new Date(e.dateUp - tzoffset).toISOString().slice(0, -1),
+                      fecha: e.dateUp.toISOString().slice(0, -1),
                       total: e.total,
                       terreno: e.m1,
                       construccion: e.m2
@@ -325,9 +369,28 @@ const getOrdenO = (inJSON,outJSON,con,res) =>{
 
 const getOrdenR = (inJSON,outJSON,con,res) =>{
         let dateLast = '';
-        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-        const {countPR,nextPR} = inJSON; 
-        if(new Date(countPR)<new Date(nextPR)||(inJSON.op>0&&inJSON.op<4)){
+        let {countPR,nextPR} = inJSON; 
+        /*const d = new Date()
+        let difHours = -6
+        if(d.getMonth()>2&&d.getMonth()<10){
+          difHours = -5
+        }*/
+        countPR = new Date(countPR)
+        nextPR = new Date(nextPR)
+
+        if(countPR.getMonth()>2&&countPR.getMonth()<10){
+           countPR.setHours(-5,0,0,0)
+        }else{
+            countPR.setHours(-6,0,0,0)
+        }
+        if(nextPR.getMonth()>2&&nextPR.getMonth()<10){
+            nextPR.setHours(-5,0,0,0)
+        }else{
+            nextPR.setHours(-6,0,0,0)
+        }
+        if(countPR<nextPR||(inJSON.op>0&&inJSON.op<4)){
+          countPR=countPR.toISOString()
+        nextPR=nextPR.toISOString()
         let subquery = '';
         let sql = `SELECT * FROM ordenesr o, padronr pa, ubipredior u WHERE `
           sql += `(o.dateUp>='${countPR}' AND o.dateUp<'${nextPR}') ${subquery} `
@@ -365,6 +428,11 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
                  // outJSON.ordenesr = result
                   result.forEach(e => {
                     e.dateUp = new Date(e.dateUp)
+                    if(e.dateUp.getMonth()>2&&e.dateUp.getMonth()<10){
+                      e.dateUp.setHours(e.dateUp.getHours()-5)
+                    }else{
+                      e.dateUp.setHours(e.dateUp.getHours()-6)
+                    }
                     //e.dateUp = new Date(e.dateUp - tzoffset)
                     outJSON.dataTable.push({
                       key: `${e.CTA}${outJSON.i}r`,
@@ -372,7 +440,7 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
                       idOrden: e.idOrden,
                       NOMBRE: e.contribuyente,
                       tp: 'RUSTICO',
-                      fecha: new Date(e.dateUp - tzoffset).toISOString().slice(0, -1),
+                      fecha: e.dateUp.toISOString().slice(0, -1),
                       total: e.total,
                       terreno: e.m1,
                       construccion: e.m2
@@ -487,9 +555,20 @@ const getLength = (req, res) => {
     let inJSON = req.body
     let dateLabel = null;
     let dateLast = '';
-    let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    inJSON.fi=new Date(new Date(inJSON.fi)-tzoffset);
-    inJSON.ff=new Date(new Date(inJSON.ff)-tzoffset);
+    inJSON.fi=new Date(new Date(inJSON.fi));
+    inJSON.ff=new Date(new Date(inJSON.ff));
+    //inJSON.fi.setHours(difHours,0,0,0)
+    //inJSON.ff.setHours(difHours,0,0,0)
+    if(inJSON.fi.getMonth()>2&&inJSON.fi.getMonth()<10){
+        inJSON.fi.setHours(-5,0,0,0)
+    }else{
+        inJSON.fi.setHours(-6,0,0,0)
+    }
+    if(inJSON.ff.getMonth()>2&&inJSON.ff.getMonth()<10){
+        inJSON.ff.setHours(-5,0,0,0)
+    }else{
+        inJSON.ff.setHours(-6,0,0,0)
+    }
     inJSON.fi=inJSON.fi.toISOString();
     inJSON.ff=inJSON.ff.toISOString();
     let con = mysql.createConnection({
@@ -551,8 +630,8 @@ const getLength = (req, res) => {
         con.query(sql, (err, result, fields) => {
           if(result&&result.length>0){
             outJSON.lengthU = result.length
-            console.log(result)
-            console.log(result.length)
+         //   console.log(result)
+            //console.log(result.length)
           //  outJSON.countPU = result[0].dateUp
          //   outJSON.nextPU = result[result.length<50?(result.length-1):50].dateUp
            // outJSON.ordenesu = result
