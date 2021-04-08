@@ -183,7 +183,6 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                         outJSON.idOrden = idOrden
                         let newDate = new Date(inJSON.dateUp)
                         //const dVerano = new Date();
-                        const d = new Date();
                         //newDate.setHours(newDate.getHours()-6)
                         outJSON.dateUpV = newDate.toISOString()
                         newDate = newDate.toISOString()
