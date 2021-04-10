@@ -105,17 +105,31 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
         }
         countPU = new Date(countPU)
         nextPU = new Date(nextPU)
+        
+        let splitD = (countPU+"").split("GMT");
+        if(splitD.length>1){
+            splitD = splitD[1].split("+").join("");
+            if(splitD[0]==='-'){
+                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+            }else{
+                splitD = splitD[0]+""+splitD[1];
+            }
+            splitD = parseInt(splitD);
+        }
+        countPU.setHours(countPU.getHours()+splitD);
 
-        if(countPU.getMonth()>2&&countPU.getMonth()<10){
-           countPU.setHours(-5,0,0,0)
-        }else{
-            countPU.setHours(-6,0,0,0)
+        splitD = (nextPU+"").split("GMT");
+        if(splitD.length>1){
+            splitD = splitD[1].split("+").join("");
+            if(splitD[0]==='-'){
+                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+            }else{
+                splitD = splitD[0]+""+splitD[1];
+            }
+            splitD = parseInt(splitD);
         }
-        if(nextPU.getMonth()>2&&nextPU.getMonth()<10){
-            nextPU.setHours(-5,0,0,0)
-        }else{
-            nextPU.setHours(-6,0,0,0)
-        }
+        nextPU.setHours(nextPU.getHours()+splitD);
+
         if(countPU<nextPU||(inJSON.op>0&&inJSON.op<4)){
         let subquery = '';
         countPU=countPU.toISOString()
@@ -166,11 +180,17 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
               //setResponse()
                result.forEach(e => { 
                 e.dateUp = new Date(e.dateUp)
-                if(e.dateUp.getMonth()>2&&e.dateUp.getMonth()<10){
-                  e.dateUp.setHours(e.dateUp.getHours()-5)
-                }else{
-                  e.dateUp.setHours(e.dateUp.getHours()-6)
-                }
+                let splitD = (e.dateUp+"").split("GMT");
+                  if(splitD.length>1){
+                      splitD = splitD[1].split("+").join("");
+                      if(splitD[0]==='-'){
+                          splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                      }else{
+                          splitD = splitD[0]+""+splitD[1];
+                      }
+                      splitD = parseInt(splitD);
+                  }
+                  e.dateUp.setHours(e.dateUp.getHours()+splitD);
                 //e.dateUp = new Date(e.dateUp-tzoffset)
                 outJSON.dataTable.push({
                   key: `${e.CTA}${outJSON.i}u`,
@@ -235,16 +255,30 @@ const getOrdenO = (inJSON,outJSON,con,res) =>{
         countPO = new Date(countPO)
         nextPO = new Date(nextPO)
 
-        if(countPO.getMonth()>2&&countPO.getMonth()<10){
-           countPO.setHours(-5,0,0,0)
-        }else{
-            countPO.setHours(-6,0,0,0)
+        let splitD = (countPO+"").split("GMT");
+        if(splitD.length>1){
+            splitD = splitD[1].split("+").join("");
+            if(splitD[0]==='-'){
+                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+            }else{
+                splitD = splitD[0]+""+splitD[1];
+            }
+            splitD = parseInt(splitD);
         }
-        if(nextPO.getMonth()>2&&nextPO.getMonth()<10){
-            nextPO.setHours(-5,0,0,0)
-        }else{
-            nextPO.setHours(-6,0,0,0)
+        countPO.setHours(countPO.getHours()+splitD);
+
+        splitD = (nextPO+"").split("GMT");
+        if(splitD.length>1){
+            splitD = splitD[1].split("+").join("");
+            if(splitD[0]==='-'){
+                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+            }else{
+                splitD = splitD[0]+""+splitD[1];
+            }
+            splitD = parseInt(splitD);
         }
+        nextPO.setHours(nextPO.getHours()+splitD);
+
         if(countPO<nextPO||(inJSON.op>0&&inJSON.op<4)){
         countPO=countPO.toISOString()
         nextPO=nextPO.toISOString()
@@ -284,11 +318,17 @@ const getOrdenO = (inJSON,outJSON,con,res) =>{
                  // outJSON.ordenesr = result
                   result.forEach(e => {
                     e.dateUp = new Date(e.dateUp)
-                    if(e.dateUp.getMonth()>2&&e.dateUp.getMonth()<10){
-                      e.dateUp.setHours(e.dateUp.getHours()-5)
-                    }else{
-                      e.dateUp.setHours(e.dateUp.getHours()-6)
-                    }
+                    let splitD = (e.dateUp+"").split("GMT");
+                  if(splitD.length>1){
+                      splitD = splitD[1].split("+").join("");
+                      if(splitD[0]==='-'){
+                          splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                      }else{
+                          splitD = splitD[0]+""+splitD[1];
+                      }
+                      splitD = parseInt(splitD);
+                  }
+                  e.dateUp.setHours(e.dateUp.getHours()+splitD);
                     //e.dateUp = new Date(e.dateUp - tzoffset)
                     outJSON.dataTable.push({
                       key: `${e.idFolio}${outJSON.i}f`,
@@ -378,16 +418,30 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
         countPR = new Date(countPR)
         nextPR = new Date(nextPR)
 
-        if(countPR.getMonth()>2&&countPR.getMonth()<10){
-           countPR.setHours(-5,0,0,0)
-        }else{
-            countPR.setHours(-6,0,0,0)
+        let splitD = (countPR+"").split("GMT");
+        if(splitD.length>1){
+            splitD = splitD[1].split("+").join("");
+            if(splitD[0]==='-'){
+                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+            }else{
+                splitD = splitD[0]+""+splitD[1];
+            }
+            splitD = parseInt(splitD);
         }
-        if(nextPR.getMonth()>2&&nextPR.getMonth()<10){
-            nextPR.setHours(-5,0,0,0)
-        }else{
-            nextPR.setHours(-6,0,0,0)
+        countPR.setHours(countPR.getHours()+splitD);
+
+        splitD = (nextPR+"").split("GMT");
+        if(splitD.length>1){
+            splitD = splitD[1].split("+").join("");
+            if(splitD[0]==='-'){
+                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+            }else{
+                splitD = splitD[0]+""+splitD[1];
+            }
+            splitD = parseInt(splitD);
         }
+        nextPR.setHours(nextPR.getHours()+splitD);
+      
         if(countPR<nextPR||(inJSON.op>0&&inJSON.op<4)){
           countPR=countPR.toISOString()
         nextPR=nextPR.toISOString()
@@ -428,11 +482,18 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
                  // outJSON.ordenesr = result
                   result.forEach(e => {
                     e.dateUp = new Date(e.dateUp)
-                    if(e.dateUp.getMonth()>2&&e.dateUp.getMonth()<10){
-                      e.dateUp.setHours(e.dateUp.getHours()-5)
-                    }else{
-                      e.dateUp.setHours(e.dateUp.getHours()-6)
-                    }
+                    
+                    let splitD = (e.dateUp+"").split("GMT");
+                  if(splitD.length>1){
+                      splitD = splitD[1].split("+").join("");
+                      if(splitD[0]==='-'){
+                          splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                      }else{
+                          splitD = splitD[0]+""+splitD[1];
+                      }
+                      splitD = parseInt(splitD);
+                  }
+                  e.dateUp.setHours(e.dateUp.getHours()+splitD);
                     //e.dateUp = new Date(e.dateUp - tzoffset)
                     outJSON.dataTable.push({
                       key: `${e.CTA}${outJSON.i}r`,
@@ -557,18 +618,31 @@ const getLength = (req, res) => {
     let dateLast = '';
     inJSON.fi=new Date(new Date(inJSON.fi));
     inJSON.ff=new Date(new Date(inJSON.ff));
-    //inJSON.fi.setHours(difHours,0,0,0)
-    //inJSON.ff.setHours(difHours,0,0,0)
-    if(inJSON.fi.getMonth()>2&&inJSON.fi.getMonth()<10){
-        inJSON.fi.setHours(-5,0,0,0)
-    }else{
-        inJSON.fi.setHours(-6,0,0,0)
+    
+    let splitD = (inJSON.fi+"").split("GMT");
+    if(splitD.length>1){
+        splitD = splitD[1].split("+").join("");
+        if(splitD[0]==='-'){
+            splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+        }else{
+            splitD = splitD[0]+""+splitD[1];
+        }
+        splitD = parseInt(splitD);
     }
-    if(inJSON.ff.getMonth()>2&&inJSON.ff.getMonth()<10){
-        inJSON.ff.setHours(-5,0,0,0)
-    }else{
-        inJSON.ff.setHours(-6,0,0,0)
+    inJSON.fi.setHours(inJSON.fi.getHours()+splitD);
+
+    splitD = (inJSON.ff+"").split("GMT");
+    if(splitD.length>1){
+        splitD = splitD[1].split("+").join("");
+        if(splitD[0]==='-'){
+            splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+        }else{
+            splitD = splitD[0]+""+splitD[1];
+        }
+        splitD = parseInt(splitD);
     }
+    inJSON.ff.setHours(inJSON.ff.getHours()+splitD);
+
     inJSON.fi=inJSON.fi.toISOString();
     inJSON.ff=inJSON.ff.toISOString();
     let con = mysql.createConnection({

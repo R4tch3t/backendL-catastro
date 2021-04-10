@@ -21,13 +21,19 @@ insertOrden = (inJSON, outJSON,res, con) => {
 //const dVerano = new Date();
 const d = new Date();
 if (inJSON.dateUp === '') {
-  
-  //dVerano.setMonth(3)
-  //dVerano.setDate(4)
-  if(d.getMonth()>2&&d.getMonth()<10){
-    d.setHours(d.getHours()+1);
-  }//else{
-    d.setHours(d.getHours()-6);
+
+        let splitD = (d+"").split("GMT");
+          if(splitD.length>1){
+              splitD = splitD[1].split("+").join("");
+              if(splitD[0]==='-'){
+                  splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+              }else{
+                  splitD = splitD[0]+""+splitD[1];
+              }
+              splitD = parseInt(splitD);
+          }
+          d.setHours(d.getHours()+splitD);
+        
   //}
       sql = `INSERT INTO ordenes${inJSON.tp} (CTA,nombre,m1,m2,tc,zona,bg,periodo,total,idEmpleado,constancia,otroservicio,certi,obs,dateUp) VALUES `
       sql += `(${inJSON.CTA},'${inJSON.contribuyente}','${inJSON.m1}','${inJSON.m2}',`
@@ -49,11 +55,18 @@ if (inJSON.dateUp === '') {
           outJSON.dateUpL = new Date(outJSON.dateUp).toLocaleString();
           outJSON.dateUp = new Date(outJSON.dateUp)
           
-          if(outJSON.dateUp.getMonth()>2&&outJSON.dateUp.getMonth()<10){
-            outJSON.dateUp.setHours(outJSON.dateUp.getHours()+1) 
-          }//else{
-            outJSON.dateUp.setHours(outJSON.dateUp.getHours()-6)
-          //}
+          let splitD = (outJSON.dateUp+"").split("GMT");
+          if(splitD.length>1){
+              splitD = splitD[1].split("+").join("");
+              if(splitD[0]==='-'){
+                  splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+              }else{
+                  splitD = splitD[0]+""+splitD[1];
+              }
+              splitD = parseInt(splitD);
+          }
+          outJSON.dateUp.setHours(outJSON.dateUp.getHours()+splitD);   
+
           outJSON.dateUpV = outJSON.dateUp.toISOString()
           outJSON.dateUp = outJSON.dateUp.toISOString()
            
@@ -191,12 +204,18 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                         outJSON.dateUp = outJSON.dateUp.toISOString()
                         
                         outJSON.dateUpL = new Date(outJSON.dateUp)//.toLocaleString();
-                        //dVerano.setMonth(3)
-                        //dVerano.setDate(4)
-                        if(outJSON.dateUpL.getMonth()>2&&outJSON.dateUpL.getMonth()<10){
-                          outJSON.dateUpL.setHours(outJSON.dateUpL.getHours()+1);
-                        }//else{
-                        outJSON.dateUpL.setHours(outJSON.dateUpL.getHours()+6)
+                        
+                        let splitD = (outJSON.dateUpL+"").split("GMT");
+                        if(splitD.length>1){
+                            splitD = splitD[1].split("+").join("");
+                            if(splitD[0]==='-'){
+                                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                            }else{
+                                splitD = splitD[0]+""+splitD[1];
+                            }
+                            splitD = parseInt(splitD);
+                        }
+                        outJSON.dateUpL.setHours(outJSON.dateUpL.getHours()+splitD);   
                         
                         outJSON.dateUpL = outJSON.dateUpL.toLocaleString();
                         outJSON.idMov = "2"

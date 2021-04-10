@@ -23,6 +23,24 @@ getSubDataNoCTA=(result,idOrden,outJSON,res,con)=>{
     calle: '', lote: 0, manzana:'', numero: 0, colonia: '', cp: 0, municipio: '', localidad: '', basegrav: 0
   }];
   outJSON.orden = result
+  console.log(result)
+  outJSON.orden[0].dateUp = new Date(outJSON.orden[0].dateUp)
+
+          let splitD = (outJSON.orden[0].dateUp+"").split("GMT");
+        if(splitD.length>1){
+            splitD = splitD[1].split("+").join("");
+            if(splitD[0]==='-'){
+                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+            }else{
+                splitD = splitD[0]+""+splitD[1];
+            }
+            splitD = parseInt(splitD);
+        }
+        outJSON.orden[0].dateUp.setHours(outJSON.orden[0].dateUp.getHours()+splitD);
+
+  outJSON.orden[0].dateUpV=outJSON.orden[0].dateUp.toISOString()
+  outJSON.orden[0].dateUp=outJSON.orden[0].dateUp.toISOString()
+        
   sql = `SELECT * FROM formas f `
   sql += `WHERE f.idOrden=${idOrden} ORDER by f.idForma DESC`
   con.query(sql, (err, result, fields) => {
@@ -40,6 +58,22 @@ getSubData=(tp,idOrden,con,outJSON,res)=>{
     if (!err) {
       if (result.length > 0) {
         outJSON.orden = result[0]
+        outJSON.orden.dateUp = new Date(outJSON.orden.dateUp)
+        
+        let splitD = (outJSON.orden.dateUp+"").split("GMT");
+        if(splitD.length>1){
+            splitD = splitD[1].split("+").join("");
+            if(splitD[0]==='-'){
+                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+            }else{
+                splitD = splitD[0]+""+splitD[1];
+            }
+            splitD = parseInt(splitD);
+        }
+        outJSON.orden.dateUp.setHours(outJSON.orden.dateUp.getHours()+splitD);
+        
+        outJSON.orden.dateUpV=outJSON.orden.dateUp.toISOString()
+        outJSON.orden.dateUp=outJSON.orden.dateUp.toISOString()
         sql = `SELECT * FROM padron${tp} p WHERE p.CTA=${outJSON.orden.CTA} ORDER by p.CTA DESC`
         con.query(sql, (err, result, fields) => {
               if (!err) {

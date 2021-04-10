@@ -21,9 +21,6 @@ const getLength = (req, res) => {
   try{
     let outJSON = {}
     let inJSON = req.body
-    let dateLabel = null;
-    let dateLast = '';
-    let tzoffset = (new Date()).getTimezoneOffset() * 60000;
     let con = mysql.createConnection({
         host: "localhost",
         user: process.env.NODE_MYSQL_USER,
@@ -32,6 +29,33 @@ const getLength = (req, res) => {
     });
     con.connect((err) => {
       if(!err){
+        inJSON.fi=new Date(inJSON.fi);
+        inJSON.ff=new Date(inJSON.ff);
+        let splitD = (inJSON.fi+"").split("GMT");
+        if(splitD.length>1){
+          splitD = splitD[1].split("+").join("");
+          if(splitD[0]==='-'){
+            splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+          }else{
+            splitD = splitD[0]+""+splitD[1];
+          }
+          splitD = parseInt(splitD);
+        }
+        inJSON.fi.setHours(inJSON.fi.getHours()+splitD);
+        
+        splitD = (inJSON.ff+"").split("GMT");
+        if(splitD.length>1){
+          splitD = splitD[1].split("+").join("");
+          if(splitD[0]==='-'){
+            splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+          }else{
+            splitD = splitD[0]+""+splitD[1];
+          }
+          splitD = parseInt(splitD);
+        }
+        inJSON.ff.setHours(inJSON.ff.getHours()+splitD);
+        inJSON.fi=inJSON.fi.toISOString()
+        inJSON.ff=inJSON.ff.toISOString()
         let sql = `SELECT * FROM history WHERE dateIn>'${inJSON.fi}' AND dateIn<='${inJSON.ff}' ORDER BY idHistory DESC`;
 
         switch(inJSON.op){
@@ -45,6 +69,7 @@ const getLength = (req, res) => {
               sql = `SELECT * FROM history WHERE folio=${inJSON.CTA} ORDER BY idHistory DESC`;
           break;
         }
+        console.log(sql)
         con.query(sql, (err, result, fields) => {
           if(result&&result.length>0){
             outJSON.lengthH = result.length;

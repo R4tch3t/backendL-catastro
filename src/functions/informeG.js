@@ -48,16 +48,29 @@ const round = (num, decimales = 2) => {
           data.porcentajeT = round((data.porcentajeU + data.porcentajeR) / 2)*/
             inJSON.fi=new Date(inJSON.fi)
             inJSON.ff=new Date(inJSON.ff)
-            if(inJSON.fi.getMonth()>2&&inJSON.fi.getMonth()<10){
-                inJSON.fi.setHours(-5,0,0,0)
-            }else{
-                inJSON.fi.setHours(-6,0,0,0)
+            let splitD = (inJSON.fi+"").split("GMT");
+            if(splitD.length>1){
+                splitD = splitD[1].split("+").join("");
+                if(splitD[0]==='-'){
+                    splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                }else{
+                    splitD = splitD[0]+""+splitD[1];
+                }
+                splitD = parseInt(splitD);
             }
-            if(inJSON.ff.getMonth()>2&&inJSON.ff.getMonth()<10){
-                inJSON.ff.setHours(-5,0,0,0)
-            }else{
-                inJSON.ff.setHours(-6,0,0,0)
+            inJSON.fi.setHours(inJSON.fi.getHours()+splitD);
+            
+            splitD = (inJSON.ff+"").split("GMT");
+            if(splitD.length>1){
+                splitD = splitD[1].split("+").join("");
+                if(splitD[0]==='-'){
+                    splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                }else{
+                    splitD = splitD[0]+""+splitD[1];
+                }
+                splitD = parseInt(splitD);
             }
+            inJSON.fi.setHours(inJSON.fi.getHours()+splitD);
             inJSON.fi=inJSON.fi.toISOString()       
             inJSON.ff=inJSON.ff.toISOString()       
             let sql = `SELECT * FROM ordenesu o, predialu pr WHERE `
@@ -390,7 +403,33 @@ const round = (num, decimales = 2) => {
             data.virtualIR = 0
             data.virtualI2 = 0
             data.virtualIR2 = 0
-                            
+            inJSON.fi=new Date(inJSON.fi)
+            inJSON.ff=new Date(inJSON.ff)
+            let splitD = (inJSON.fi+"").split("GMT");
+            if(splitD.length>1){
+                splitD = splitD[1].split("+").join("");
+                if(splitD[0]==='-'){
+                    splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                }else{
+                    splitD = splitD[0]+""+splitD[1];
+                }
+                splitD = parseInt(splitD);
+            }
+            inJSON.fi.setHours(inJSON.fi.getHours()+splitD);   
+
+            splitD = (inJSON.ff+"").split("GMT");
+            if(splitD.length>1){
+                splitD = splitD[1].split("+").join("");
+                if(splitD[0]==='-'){
+                    splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                }else{
+                    splitD = splitD[0]+""+splitD[1];
+                }
+                splitD = parseInt(splitD);
+            }
+            inJSON.ff.setHours(inJSON.ff.getHours()+splitD);   
+            inJSON.fi=inJSON.fi.toISOString()
+            inJSON.ff=inJSON.ff.toISOString()
             let sql = `SELECT * FROM ordenesu o, predialu pr WHERE `
             sql += `(o.dateUp>='${inJSON.fi}' AND o.dateUp<='${inJSON.ff}') `
             sql += `AND pr.idOrden=o.idOrden ORDER by o.dateUp ASC, o.idOrden ASC`
@@ -570,9 +609,13 @@ const round = (num, decimales = 2) => {
                             if (data.virtualNR === 0) data.virtualNR = ''
                             if (data.virtualNT === 0) data.virtualNT = ''
                             data.totalI = data.rusticoI + data.urbanoI + data.suburbanoI
+                           // data.totalI=round(data.totalI,2);
                             data.totalRI = data.recargosI + data.recargosIR
                             data.totalRezI = data.rezagosI + data.rezagosIR
+                            console.log(data.totalRezI)
+                            data.totalRezI=round(data.totalRezI,2);
                             data.totalIT = data.totalI + data.totalRI + data.totalRezI
+                            data.totalIT=round(data.totalIT,2);
                             data.urbanoA = round(data.urbanoI * 0.15,0)*2
                             data.urbanoA = round(data.urbanoA)
                             data.suburbanoA = data.suburbanoI * 0.30
@@ -580,8 +623,9 @@ const round = (num, decimales = 2) => {
                             data.rusticoA = round(data.rusticoI * 0.15,0)*2
                             data.rusticoA = round(data.rusticoA)
                             data.totalA = data.urbanoA + data.suburbanoA + data.rusticoA
-                            
+                            //data.totalA=round(data.totalA,2);
                             data.totalRezA = data.rezagosA + data.rezagosAR
+                            data.totalRezA=round(data.totalRezI,2);
                             data.lengthU = outJSON.lengthU
                             data.lengthR = outJSON.lengthR
                             data.lengthT = outJSON.lengthU+outJSON.lengthR

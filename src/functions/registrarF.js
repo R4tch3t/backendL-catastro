@@ -28,7 +28,23 @@ insertForma = (inJSON,outJSON,res,con) => {
           con.query(sql, (err, result, fields) => {
             let c = 0;
             outJSON.idOrden = result[0].idOrden
-            outJSON.dateUp = result[0].dateUp
+            outJSON.dateUp = new Date(result[0].dateUp)
+            let splitD = (outJSON.dateUp+"").split("GMT");
+              if(splitD.length>1){
+                  splitD = splitD[1].split("+").join("");
+                  if(splitD[0]==='-'){
+                      splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                  }else{
+                      splitD = splitD[0]+""+splitD[1];
+                  }
+                  splitD = parseInt(splitD);
+              }
+              outJSON.dateUp.setHours(outJSON.dateUp.getHours()+splitD);   
+             
+              outJSON.dateUpV=outJSON.dateUp.toISOString();
+              outJSON.dateUp=outJSON.dateUp.toISOString();
+            
+
             outJSON.idMov = 1
             sql = `INSERT INTO folios(idOrden, tp) VALUES (${outJSON.idOrden},'${inJSON.tp}')`
             con.query(sql, (err, result) => {
@@ -98,9 +114,24 @@ const _registrarF = (req, res) => {
           if(result.length===0){
             insertForma(inJSON,outJSON,res,con)
           }else{
+            inJSON.dateUp=new Date(inJSON.dateUp)
+             let splitD = (inJSON.dateUp+"").split("GMT");
+              if(splitD.length>1){
+                  splitD = splitD[1].split("+").join("");
+                  if(splitD[0]==='-'){
+                      splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                  }else{
+                      splitD = splitD[0]+""+splitD[1];
+                  }
+                  splitD = parseInt(splitD);
+              }
+              inJSON.dateUp.setHours(inJSON.dateUp.getHours()+splitD);   
+            
+              inJSON.dateUp=inJSON.dateUp.toISOString();
+              
             sql = `UPDATE ordenes SET nombre='${inJSON.nombre}',total='${inJSON.total}',dateUp='${inJSON.dateUp}' `
             sql += `WHERE idOrden=${inJSON.idOrden} `
-            outJSON.idMov = 2
+            outJSON.idMov = 2;
             con.query(sql, (err, result, fields) => {
               let c = 0;
               if (inJSON.removI.length === 0) {
