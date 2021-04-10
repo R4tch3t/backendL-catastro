@@ -578,7 +578,7 @@ const round = (num, decimales = 2) => {
                             data.rezagosAR = round(data.rezagosIR * 0.15,0)*2
                             //data.rezagosIR = data.rezagosIR - data.rezagosAR
                             data.rezagosAR = round(data.rezagosAR)
-
+                            data.rezagosNR = round(data.rezagosNR,2)
                             data.impuestoT = data.numU + data.numSub + data.numR
                             data.urbanoNT = data.numU + data.rezagosN
                             data.suburbanoNT = data.numSub
@@ -595,6 +595,7 @@ const round = (num, decimales = 2) => {
                             data.virtualNT = data.virtualN + data.virtualNR
                             data.virtualIT = data.virtualI + data.virtualIR
                             data.virtualIT2 = data.virtualI2 + data.virtualIR2
+                            
                             if (data.numU === 0) data.numU=''
                             if (data.numSub === 0) data.numSub=''
                             if (data.numR === 0) data.numR=''
@@ -610,6 +611,7 @@ const round = (num, decimales = 2) => {
                             if (data.virtualNT === 0) data.virtualNT = ''
                             data.totalI = data.rusticoI + data.urbanoI + data.suburbanoI
                            // data.totalI=round(data.totalI,2);
+                           data.rezagosI=round(data.rezagosI,2)
                             data.totalRI = data.recargosI + data.recargosIR
                             data.totalRezI = data.rezagosI + data.rezagosIR
                             console.log(data.totalRezI)
@@ -624,6 +626,7 @@ const round = (num, decimales = 2) => {
                             data.rusticoA = round(data.rusticoA)
                             data.totalA = data.urbanoA + data.suburbanoA + data.rusticoA
                             //data.totalA=round(data.totalA,2);
+                            data.rezagosA=round(data.rezagosA,2)
                             data.totalRezA = data.rezagosA + data.rezagosAR
                             data.totalRezA=round(data.totalRezI,2);
                             data.lengthU = outJSON.lengthU
@@ -814,6 +817,7 @@ const round = (num, decimales = 2) => {
                             }
                             outJSON.dataTable=data
                             outJSON.total=total
+                            console.log(data)
                             } else {
                                 outJSON.error.name = 'error02';
                                 outJSON.ordenesr = []
