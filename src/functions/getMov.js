@@ -124,7 +124,17 @@ const getData = (inJSON, outJSON, res, con) => {
     let i = 0;
     result.forEach(e => { 
       e.dateIn = new Date(e.dateIn)
-      //e.dateIn = new Date(e.dateIn-tzoffset)
+      /*let splitD = (e.dateIn+"").split("GMT");
+        if(splitD.length>1){
+          splitD = splitD[1].split("+").join("");
+          if(splitD[0]==='-'){
+            splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+          }else{
+            splitD = splitD[0]+""+splitD[1];
+          }
+          splitD = parseInt(splitD);
+        }
+       // e.dateIn.setHours(e.dateIn.getHours()+splitD);*/
       outJSON.history.push({
         key: `${e.CTA}${i}`,
         idHistory: e.idHistory,
@@ -166,7 +176,7 @@ const getData = (inJSON, outJSON, res, con) => {
         CTA: e.CTA,
         idOrden: e.idOrden,
         folio: e.folio,
-        dateIn: e.dateIn.toLocaleString()
+        dateIn: e.dateIn.toISOString()
         //dateIn: new Date(e.dateIn - tzoffset).toISOString().slice(0, -1),
       })
       i++
