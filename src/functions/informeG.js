@@ -585,6 +585,7 @@ const round = (num, decimales = 2) => {
                             data.rusticoNT = data.numR + data.rezagosNR
                             data.totalN = data.numU + data.numSub + data.numR + data.rezagosN + data.rezagosNR
                             data.urbanoIT = data.urbanoI + data.rezagosI
+                            data.urbanoIT=round(data.urbanoIT,2);
 
                             //data.suburbanoIT = data.suburbanoI + data.rezagosI
                             //data.virtualI2 = data.virtualI * 0.30
