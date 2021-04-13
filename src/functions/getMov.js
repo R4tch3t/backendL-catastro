@@ -124,17 +124,17 @@ const getData = (inJSON, outJSON, res, con) => {
     let i = 0;
     result.forEach(e => { 
       e.dateIn = new Date(e.dateIn)
-      /*let splitD = (e.dateIn+"").split("GMT");
-        if(splitD.length>1){
-          splitD = splitD[1].split("+").join("");
-          if(splitD[0]==='-'){
-            splitD = splitD[0]+""+splitD[1]+""+splitD[2];
-          }else{
-            splitD = splitD[0]+""+splitD[1];
-          }
-          splitD = parseInt(splitD);
+      let splitD = (e.dateIn+"").split("GMT");
+      if(splitD.length>1){
+        splitD = splitD[1].split("+").join("");
+        if(splitD[0]==='-'){
+          splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+        }else{
+          splitD = splitD[0]+""+splitD[1];
         }
-       // e.dateIn.setHours(e.dateIn.getHours()+splitD);*/
+        splitD = parseInt(splitD);
+      }
+      e.dateIn.setHours(e.dateIn.getHours()+splitD);
       outJSON.history.push({
         key: `${e.CTA}${i}`,
         idHistory: e.idHistory,
