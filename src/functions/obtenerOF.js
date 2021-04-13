@@ -98,11 +98,7 @@ const setNames = (res, inJSON, outJSON, con)=>{
 const getOrdenU = (inJSON,outJSON,con,res) =>{
         let dateLast = '';
          let {countPU,nextPU} = inJSON; 
-        const d = new Date()
-        let difHours = -6
-        if(d.getMonth()>2&&d.getMonth()<10){
-          difHours = -5
-        }
+        
         countPU = new Date(countPU)
         nextPU = new Date(nextPU)
         
@@ -173,7 +169,8 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
           outJSON.countPU = inJSON.countPU
           outJSON.nextPU = inJSON.nextPU
           if (!err) {
-           // console.log(result.length)
+            console.log(result.length)
+           console.log(result)
             if(result.length>0){
               
              // outJSON.ordenesu = result
@@ -239,7 +236,7 @@ const getOrdenU = (inJSON,outJSON,con,res) =>{
             } 
            
           }else{
-
+            getOrdenR(inJSON,outJSON,con,res)
           }
         });
       }else{
@@ -397,6 +394,7 @@ const getOrdenO = (inJSON,outJSON,con,res) =>{
           
 
               } else {
+                setResponse(res, outJSON,con)
               }
               
             });
@@ -443,7 +441,7 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
         nextPR.setHours(nextPR.getHours()+splitD);
       
         if(countPR<nextPR||(inJSON.op>0&&inJSON.op<4)){
-          countPR=countPR.toISOString()
+        countPR=countPR.toISOString()
         nextPR=nextPR.toISOString()
         let subquery = '';
         let sql = `SELECT * FROM ordenesr o, padronr pa, ubipredior u WHERE `
@@ -562,6 +560,7 @@ const getOrdenR = (inJSON,outJSON,con,res) =>{
           
 
               } else {
+                getOrdenO(inJSON,outJSON,con,res)
               }
               
             });
@@ -700,7 +699,6 @@ const getLength = (req, res) => {
           break;
           }
           outJSON.totalU = 0;
-          console.log(sql);
         con.query(sql, (err, result, fields) => {
           if(result&&result.length>0){
             outJSON.lengthU = result.length
@@ -767,7 +765,6 @@ const getLength = (req, res) => {
             con.query(sql, (err, result, fields) => {
               if(result&&result.length>0){
                 outJSON.lengthR = result.length;
-                console.log(result.length)
   //              outJSON.countPR = result[0].dateUp;
 //                outJSON.nextPR = result[result.length<50?(result.length-1):50].dateUp
                 
@@ -830,7 +827,6 @@ outJSON.i=0
             con.query(sql, (err, result, fields) => {
               if(result&&result.length>0){
                 outJSON.lengthO=result.length
-                console.log(result.length)
                 result.forEach(e => {
                     e.dateUp = new Date(e.dateUp)
                     
