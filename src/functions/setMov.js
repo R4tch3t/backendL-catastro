@@ -19,7 +19,18 @@ const setResponse = (res, outJSON,con) => {
 
 insertMov = (inJSON, outJSON,res, con) => {
   const d = new Date();
-  d.setHours(d.getHours()-6);
+  //d.setHours(d.getHours()-6);
+  let splitD = (d+"").split("GMT");
+  if(splitD.length>1){
+    splitD = splitD[1].split("+").join("");
+    if(splitD[0]==='-'){
+      splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+    }else{
+      splitD = splitD[0]+""+splitD[1];
+    }
+    splitD = parseInt(splitD);
+  }
+  d.setHours(d.getHours()+splitD);
   let sql = `INSERT INTO history (idMov,idUsuario,CTA,idOrden,folio,idDataHistory,dateIn) VALUES `
   sql += `('${inJSON.idMov}','${inJSON.idEmpleado}','${inJSON.CTA}',`
   sql += `'${inJSON.idOrden}','${inJSON.folio}','${outJSON.idDataHistory}','${d.toISOString()}')`
