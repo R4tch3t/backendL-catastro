@@ -96,8 +96,7 @@ const setNames = (res, inJSON, outJSON, con)=>{
 }
 
 const getOrdenU = (inJSON,outJSON,con,res) =>{
-        let dateLast = '';
-         let {countPU,nextPU} = inJSON; 
+        let {countPU,nextPU} = inJSON; 
         
         countPU = new Date(countPU)
         nextPU = new Date(nextPU)
