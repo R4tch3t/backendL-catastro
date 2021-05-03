@@ -209,12 +209,14 @@ const checkUbi = (inJSON, outJSON, res, con) => {
                         if(splitD.length>1){
                             splitD = splitD[1].split("+").join("");
                             if(splitD[0]==='-'){
-                                splitD = splitD[0]+""+splitD[1]+""+splitD[2];
+                                splitD = splitD[1]+""+splitD[2];
                             }else{
                                 splitD = splitD[0]+""+splitD[1];
                             }
                             splitD = parseInt(splitD);
                         }
+                        console.log(splitD);
+                        console.log(outJSON.dateUpL.getHours());
                         outJSON.dateUpL.setHours(outJSON.dateUpL.getHours()+splitD);   
                         
                         outJSON.dateUpL = outJSON.dateUpL.toLocaleString();
