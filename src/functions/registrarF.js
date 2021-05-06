@@ -41,7 +41,7 @@ insertForma = (inJSON,outJSON,res,con) => {
               }
               outJSON.dateUp.setHours(outJSON.dateUp.getHours()+splitD);   
              
-              outJSON.dateUpV=outJSON.dateUp.toISOString();
+              outJSON.dateUpV=outJSON.dateUp.toLocaleString();
               outJSON.dateUp=outJSON.dateUp.toISOString();
             
 
@@ -126,7 +126,7 @@ const _registrarF = (req, res) => {
                   splitD = parseInt(splitD);
               }
               inJSON.dateUp.setHours(inJSON.dateUp.getHours()+splitD);   
-              outJSON.dateUpV=inJSON.dateUp.toISOString();
+              outJSON.dateUpV=inJSON.dateUp.toLocaleString();
               inJSON.dateUp=inJSON.dateUp.toISOString();
               
             sql = `UPDATE ordenes SET nombre='${inJSON.nombre}',total='${inJSON.total}',dateUp='${inJSON.dateUp}' `
