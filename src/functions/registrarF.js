@@ -126,7 +126,7 @@ const _registrarF = (req, res) => {
                   splitD = parseInt(splitD);
               }
               inJSON.dateUp.setHours(inJSON.dateUp.getHours()+splitD);   
-            
+              outJSON.dateUpV=inJSON.dateUp.toISOString();
               inJSON.dateUp=inJSON.dateUp.toISOString();
               
             sql = `UPDATE ordenes SET nombre='${inJSON.nombre}',total='${inJSON.total}',dateUp='${inJSON.dateUp}' `
