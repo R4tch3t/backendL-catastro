@@ -134,6 +134,7 @@ const _registrarF = (req, res) => {
               
             sql = `UPDATE ordenes SET nombre='${inJSON.nombre}',total='${inJSON.total}',dateUp='${inJSON.dateUp}' `
             sql += `WHERE idOrden=${inJSON.idOrden} `
+            console.log(sql)
             outJSON.idMov = 2;
             con.query(sql, (err, result, fields) => {
               let c = 0;
