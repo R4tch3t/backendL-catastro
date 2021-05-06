@@ -18,9 +18,12 @@ const setResponse = (res, outJSON,con) => {
 }
 
 insertForma = (inJSON,outJSON,res,con) => {
-    let sql = `INSERT INTO ordenes (nombre,tp,total,idEmpleado) VALUES `
+    let newDate = new Date(inJSON.dateUp)
+    newDate = newDate.toISOString()
+                        
+    let sql = `INSERT INTO ordenes (nombre,tp,total,idEmpleado,dateUp) VALUES `
     sql += `('${inJSON.nombre}', '${inJSON.tp}',`
-    sql += `'${inJSON.total}','${inJSON.idEmpleado}')`
+    sql += `'${inJSON.total}','${inJSON.idEmpleado}','${newDate}')`
     con.query(sql, (err, result, fields) => {
       if (!err) { 
           const idOrden = result.insertId
