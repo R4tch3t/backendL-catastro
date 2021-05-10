@@ -90,7 +90,9 @@ sleep = (milliseconds) => {
     }
         
     }
+
     renderPages = async (subPath, inJSON, outJSON, con, res) => {
+        try{
       var PDFImage = require("pdf-image").PDFImage;
       
       var pdfImage = new PDFImage(subPath);
@@ -103,31 +105,41 @@ sleep = (milliseconds) => {
      //   pdfImage.convertPage(inJSON.npage).then(async(imagePath) => {
             // 0-th page (first page) of the slide.pdf is available as slide-0.
             const vision = require('@google-cloud/vision');
-            console.log(vision)
+          //  console.log(vision)
             // Creates a client
             const client = new vision.ImageAnnotatorClient();
             // Performs text detection on the local file
             const imagePath = pdf64.stackAna[inJSON.CTA][inJSON.npage]
-            const [result] = await client.documentTextDetection(imagePath);
+            let result = []
+            try{
+                [result] = await client.documentTextDetection(imagePath)
+            }catch(e){
+                console.log(e)
+            }
+            /*.catch(e=>{
+                console.log(e)
+            });*/
             const detections = result.textAnnotations;
             let txt = ""
             let prevLit = ""
             outJSON.S = null
-            detections.forEach(text => {
-                txt = text.description
-
-                if (txt === "=" && (prevLit === "S" || prevLit === "s")) {
+            if(detections){
+                detections.forEach(text => {
+                    txt = text.description
+                    console.log(txt)
+                    if (txt === "=" && (prevLit === "S" || prevLit === "s")) {
+                        prevLit = txt
+                    }
+                    if (txt.includes("m²")) {
+                        outJSON.S = prevLit
+                    }
+                    if (prevLit.includes("=")) {
+                        outJSON.S = txt.replace("M2", "").replace("m2", "");
+                    }
                     prevLit = txt
-                }
-                if (txt.includes("m²")) {
-                    outJSON.S = prevLit
-                }
-                if (prevLit.includes("=")) {
-                    outJSON.S = txt.replace("M2", "").replace("m2", "");
-                }
-                prevLit = txt
-            });
-            if (!outJSON.S||outJSON.S === null||outJSON.S === undefined) {
+                });
+            }
+            if ((!outJSON.S||outJSON.S === null||outJSON.S === undefined)&&detections) {
                 inJSON.npage++;
                 outJSON.npage=inJSON.npage;
                 outJSON.lengthP=lengthP[inJSON.CTA];
@@ -135,6 +147,9 @@ sleep = (milliseconds) => {
                 outJSON.analising=1;
                 setResponse(res, outJSON, con);
             } else {
+                if(!detections){
+                    outJSON.S='0'    
+                }
                 outJSON.S = outJSON.S.split(",").join("")
                 outJSON.S = outJSON.S.split(" ").join("")
                 let sql = `UPDATE padron${inJSON.tp} SET m1='${outJSON.S}'`
@@ -150,6 +165,9 @@ sleep = (milliseconds) => {
                     setResponse(res, outJSON,con);
                 });
             }
+        }catch(e){
+            console.log(e)
+        }
     }
 
     registrar = (res, req) => {

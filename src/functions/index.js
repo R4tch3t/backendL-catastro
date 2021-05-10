@@ -19,7 +19,9 @@ const getAvatar = require('./getAvatar');
 const setMov = require('./setMov');
 const getMov = require('./getMov');
 const regE = require('./regE');
+const scanO = require('./scanO');
 module.exports = {
     comprobarU, regO, genFolio, saveDataL, allPadrones, padrones, getPredial, byFolio, getZone, registrarF,
-    informeG, genCerti, actualizarC, obtenerOF, actualizarU, actualizarP, registrarC, getAvatar, setMov, getMov, regE
+    informeG, genCerti, actualizarC, obtenerOF, actualizarU, actualizarP, registrarC, getAvatar, setMov, getMov, regE,
+    scanO
 }

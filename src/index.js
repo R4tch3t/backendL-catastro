@@ -10,7 +10,7 @@ pdf64 = {};
 const {
     comprobarU,regO,genFolio,saveDataL,allPadrones,padrones,getPredial,byFolio,
     getZone,registrarF,informeG,genCerti,actualizarC,obtenerOF,actualizarU,actualizarP,registrarC,
-    getAvatar, setMov, getMov, regE
+    getAvatar, setMov, getMov, regE, scanO
 } = require('./functions');
 let app = express();
 let options = null;
@@ -446,6 +446,23 @@ app.all('/regE', (req, res) => {
             setResponseHeadersJSON(res);
 
             regE(req,res);
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/scanO', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            scanO(req,res);
        // })
         //res.send(filename)
 
