@@ -135,7 +135,7 @@ sleep = (milliseconds) => {
                 console.log(detections.length)
                 detections.forEach(text => {
                     txt = text.description
-                    console.log(txt)
+                 //   console.log(txt)
                     
                     if (txt.includes("m²")) {
                         outJSON.S = prevLit
@@ -394,7 +394,7 @@ sleep = (milliseconds) => {
                         
                         while(!d){
                             d=detections[k].description;
-                            if(d="4bo.00"){
+                            if(d==="4bo.00"){
                                 d="400"
                             }
                             d = d.split(",").join("")
