@@ -357,8 +357,13 @@ sleep = (milliseconds) => {
                         //outJSON.V020401=detections[i+1].description;
                         let d=detections[i+1].description;
                         let k = i+1;
-                        if((d+"").includes("41121001")){
+                        if((d+"").includes("41121001")||(d+"").includes("$")){
                             k++;
+                            d=detections[k].description;
+                            k++;
+                        }
+                        if(!d.includes(".")){
+                          //  k++;
                             d=detections[k].description;
                             k++;
                         }
@@ -385,8 +390,24 @@ sleep = (milliseconds) => {
                                 k--
                                 aux = detections[k].description
                             }
-
+                            if(d===41171001007){
+                                       let m=i-1
+                                        d=detections[m].description;
+                                        d = d.split(",").join("")
+                                        d=parseInt(d)
+                                        while(!d){
+                                            m--
+                                            d=detections[m].description;
+                                            if(d.includes(".")){
+                                                d = d.split(",").join("")
+                                                d=parseInt(d)
+                                            }else{
+                                                d=null
+                                            }
+                                        }
+                            }
                             if(aux.includes("IMPUESTOS")||aux.includes("20403")){
+                                
                                 outJSON.V0020403=d;
                             }else if(aux.includes("20401")){
                                 outJSON.V0020401=d;
@@ -400,6 +421,10 @@ sleep = (milliseconds) => {
                         d=parseInt(d);
                         while(!d){
                             d=detections[k].description;
+                            if(d.includes("$")){
+                                d=detections[k+1].description;
+                                k++   
+                            }
                             d = d.split(",").join("");
                             d=parseInt(d);
                             k++
@@ -415,16 +440,51 @@ sleep = (milliseconds) => {
                         }
                         
                     }else if(txt==="411710010070202"){
-                        let d=detections[i-1].description;
-                        //let k = i+1;
+                        let k = i-1
+                        let d=detections[k].description;
+                        if(d.endsWith(",00")){
+                            d[d.length-3]='.'
+                            let f = d.length-3
+                            let s = ''
+                            while(f>=0){
+                                s=d[f]+s
+                                f--;
+                            }
+                            d=s;
+                        }
                         d = d.split(",").join("");
+                        while(!d.includes(".")||!parseInt(d)){
+                            k--
+                            d=detections[k].description;
+                            d = d.split(",").join("");
+
+                        }
                         d=parseInt(d);
                         if(d){
+                            outJSON.V0070202=d;
+                        }else{
+                            let k = i + 1
+                            d=detections[k].description;
+                            if(d.includes("%")){
+                                k++;
+                                d=detections[k].description;
+                            }
+                            d = d.split(",").join("");
+                            d=parseInt(d);
+                            while(!d){
+                                d=detections[k].description;
+                                d = d.split(",").join("");
+                                d=parseInt(d);
+                                k++
+                            }
                             outJSON.V0070202=d;
                         }
                     }else if(txt==="411710010070203"){
                         let k = i+1;
                         let d=detections[k].description;
+                        if(detections[k-2].description.includes("-")){
+                                d=detections[k-2].description;
+                        }
                         d=d.split(",").join("")
                         d=parseInt(d);
                         k++;
@@ -458,7 +518,7 @@ sleep = (milliseconds) => {
                         d=parseInt(d);
                         while(!d){
                             d=detections[k].description;
-                            if(d.includes("%")){
+                            if(d.includes("%")||!d.includes(".")){
                                 d=null;
                             }else{
                                 d = d.split(",").join("");
@@ -516,7 +576,31 @@ sleep = (milliseconds) => {
                         }
                         d/=72
                         outJSON.V0010804=d;
-                    }
+                    }else if (txt==="URBANO"||txt==="RÚSTICO"){
+                        let k = i - 1
+                        let d=detections[k].description;
+                        d=parseInt(d);
+                        outJSON.tp=txt;
+                        if(d){
+                            outJSON.CTA=d;
+                        }
+                    }else if(txt==="411210010020403"){
+                        let k = i - 1
+                        let d=detections[k].description;
+                        d = d.split(",").join("");
+                        d=parseInt(d);
+                        if(d){
+                            outJSON.V0020403=d
+                        }
+                    }/*else if (txt==="411710010070201"){ 
+                        let k = i - 1
+                        let d=detections[k].description;
+                        d=parseInt(d);
+                        outJSON.tp=txt;
+                        if(d){
+                            outJSON.CTA=d;
+                        }
+                    }*/
 
                     auxTxt+=txt+" "
 

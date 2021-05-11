@@ -44,7 +44,7 @@ insertMov = (inJSON, outJSON,res, con) => {
 }
 
 const setData = (inJSON, outJSON, res, con) => {
-
+  //if(!inJSON.contribuyenteOld.ubicacion)
   let sql = `INSERT INTO datahistory (contribuyenteOld,contribuyente,tpOld,tp,calleOld,calle,numeroOld,numero,loteOld,lote,manzanaOld,manzana,colOld,col,cpOld,cp, `
   sql+= `municipioOld,municipio,localidadOld,localidad,obsOld,obs,m1Old,m1,m2Old,m2,tcOld,tc,zonaOld,zona,bgOld,bg) VALUES`
   sql += `('${inJSON.contribuyenteOld.contribuyente.contribuyente}','${inJSON.contribuyente.contribuyente}','${inJSON.tp}','${inJSON.tp}',`
