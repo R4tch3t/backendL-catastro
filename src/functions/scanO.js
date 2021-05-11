@@ -135,7 +135,7 @@ sleep = (milliseconds) => {
                 console.log(detections.length)
                 detections.forEach(text => {
                     txt = text.description
-                 //   console.log(txt)
+                    console.log(txt)
                     
                     if (txt.includes("m²")) {
                         outJSON.S = prevLit
@@ -513,13 +513,15 @@ sleep = (milliseconds) => {
                         d=d.split(",").join("")
                         d=parseInt(d);
                         k++;
-                        while(!d||d>=0){
-                            d=detections[k].description;
-                            d=d.split(",").join("")
-                            d=parseInt(d);
-                            k++;
-                        }
-                        outJSON.V0070203 = d;
+                        try{
+                            while(!d||d>=0){
+                                d=detections[k].description;
+                                d=d.split(",").join("")
+                                d=parseInt(d);
+                                k++;
+                            }
+                            outJSON.V0070203 = d;
+                        }catch(e){}
                     }else if(txt==="414910040090701"){
                         let k = i + 1
                         let d=detections[k].description;
