@@ -318,11 +318,14 @@ sleep = (milliseconds) => {
                         d=d.split(",").join("");
                         d=parseInt(d);
                         if(txt==="411210010020401"){
-                            
-                            outJSON.V0020401=d
+                            if(!outJSON.V0020401){
+                                outJSON.V0020401=d
+                            }
                         }
                         if(txt==="411210010020403"){
-                            outJSON.V0020403=d
+                            if(!outJSON.V0020403){
+                                outJSON.V0020403=d
+                            }
                         }
                         
                         
