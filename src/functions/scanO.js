@@ -135,7 +135,7 @@ sleep = (milliseconds) => {
                 console.log(detections.length)
                 detections.forEach(text => {
                     txt = text.description
-                    console.log(txt)
+                   // console.log(txt)
                     
                     if (txt.includes("m²")) {
                         outJSON.S = prevLit
