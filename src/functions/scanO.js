@@ -135,7 +135,7 @@ sleep = (milliseconds) => {
                 console.log(detections.length)
                 detections.forEach(text => {
                     txt = text.description
-                  //  console.log(txt)
+                    console.log(txt)
                     
                     if (txt.includes("m²")) {
                         outJSON.S = prevLit
@@ -307,7 +307,26 @@ sleep = (milliseconds) => {
                         outJSON.localidad=auxTxt
                         outJSON.total=''
                         auxTxt="";
-                    }*/else if (txt.includes("DE:")){
+                    }*/
+                    else if (txt==="411210010020401"||txt==="411210010020403"){
+                        let k = i-1;
+                        let d = detections[k].description;
+                        while(!d.includes(".")){
+                            k--;
+                            d = detections[k].description;
+                        }
+                        d=d.split(",").join("");
+                        d=parseInt(d);
+                        if(txt==="411210010020401"){
+                            
+                            outJSON.V0020401=d
+                        }
+                        if(txt==="411210010020403"){
+                            outJSON.V0020403=d
+                        }
+                        
+                        
+                    }else if (txt.includes("DE:")){
                         
                         outJSON.total=detections[i+1].description;
                         if(outJSON.total.includes("$")){
@@ -372,6 +391,9 @@ sleep = (milliseconds) => {
                         
                         while(!d){
                             d=detections[k].description;
+                            if(d="4bo.00"){
+                                d="400"
+                            }
                             d = d.split(",").join("")
                             d=parseInt(d)
                             k++;
