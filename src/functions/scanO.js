@@ -731,6 +731,7 @@ sleep = (milliseconds) => {
 
 const scanO = (req, res) => {
         try {
+            req.body.CTA = Math.random()
             const {CTA,analize} = req.body
             const outJSON = {}
             
