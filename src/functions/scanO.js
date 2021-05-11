@@ -742,7 +742,7 @@ const scanO = (req, res) => {
                         currentCTA = CTA
                         registrar(res, req);
                     } else if (currentCTA !== CTA) {
-                        outJSO.nextNode = 1
+                        outJSON.nextNode = 1
                         outJSON.currentCTA = currentCTA
                         setResponse(res, outJSON);
                         /*if(res){
