@@ -4,6 +4,7 @@ const fs = require('fs');
 pdf64 = {}
 pdf64.stackAna={}
 lengthP = {}
+countT = {}
 const setResponse = (res, outJSON,con) => {
      //   outJSON = JSON.stringify(outJSON);
      try{
@@ -710,6 +711,7 @@ sleep = (milliseconds) => {
                                     outJSON.next = 0
                                     pdf64[inJSON.CTA] = '';
                                     currentCTA = undefined;
+                                    countT[inJSON.CTA]={count: 0}
                                     setResponse(res, outJSON,con);
                                 //});
                              
@@ -732,15 +734,32 @@ sleep = (milliseconds) => {
 const scanO = (req, res) => {
         try {
             //req.body.CTA = Math.random()
-            const {CTA,analize} = req.body
+            const {CTA,analize,count} = req.body
             const outJSON = {}
             
             if (CTA) {
 
                 if (!analize) {
                     if (currentCTA === undefined || currentCTA === CTA) {
-                        currentCTA = CTA
-                        registrar(res, req);
+                        /*if(!countT[CTA]){
+                            countT[CTA].count=count
+                        }else{*/
+                            if(!countT[CTA]){
+                                countT[CTA]={count: 0}
+                            }
+                            if(countT[CTA].count<count){
+                                //countT[CTA]={}
+                                countT[CTA].count=count
+                                currentCTA = CTA
+                                registrar(res, req);
+                            }else{
+                                outJSON.nextNode = 1
+                                outJSON.currentCTA = currentCTA
+                                setResponse(res, outJSON);        
+                            }
+                        //}
+                        
+
                     } else if (currentCTA !== CTA) {
                         outJSON.nextNode = 1
                         outJSON.currentCTA = currentCTA
