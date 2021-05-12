@@ -741,7 +741,7 @@ const scanO = (req, res) => {
             if (CTA) {
 
                 if (!analize) {
-                    if (currentCTA === undefined || currentCTA === CTA) {
+                    //if (currentCTA === undefined || currentCTA === CTA) {
                         /*if(!countT[CTA]){
                             countT[CTA].count=count
                         }else{*/
@@ -762,14 +762,12 @@ const scanO = (req, res) => {
                         //}
                         
 
-                    } else if (currentCTA !== CTA) {
+                   /* } else if (currentCTA !== CTA) {
                         outJSON.nextNode = 1
                         outJSON.currentCTA = currentCTA
                         setResponse(res, outJSON);
-                        /*if(res){
-                        res.end()
-                        }*/
-                    }
+                        
+                    }*/
                 } else {
                     analice(res, req)
                 }
