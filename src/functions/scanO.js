@@ -748,7 +748,8 @@ const scanO = (req, res) => {
                             if(!countT[CTA]){
                                 countT[CTA]={count: 0}
                             }
-                            if(countT[CTA].count<count){
+                            //if()
+                            if(!countT[CTA].count||countT[CTA].count<count){
                                 //countT[CTA]={}
                                 countT[CTA].count=count
                                 currentCTA = CTA
