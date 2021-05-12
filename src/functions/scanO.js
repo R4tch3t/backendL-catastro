@@ -659,6 +659,7 @@ sleep = (milliseconds) => {
                     pdf64[inJSON.CTA] = '';
                     currentCTA = undefined;
                     lengthP[inJSON.CTA]=undefined
+                    countT[inJSON.CTA]={}
                     setResponse(res, outJSON,con);
                /* });*/
             }
@@ -711,7 +712,7 @@ sleep = (milliseconds) => {
                                     outJSON.next = 0
                                     pdf64[inJSON.CTA] = '';
                                     currentCTA = undefined;
-                                    countT[inJSON.CTA]={count: 0}
+                                    countT[inJSON.CTA]={}
                                     setResponse(res, outJSON,con);
                                 //});
                              
