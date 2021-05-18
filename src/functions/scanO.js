@@ -3,8 +3,8 @@ const base64 = require('base64topdf');
 const fs = require('fs');
 pdf64 = {}
 pdf64.stackAna={}
-lengthP = {}
-countT = {}
+lengthP = {};
+countT = {};
 const setResponse = (res, outJSON,con) => {
      //   outJSON = JSON.stringify(outJSON);
      try{
