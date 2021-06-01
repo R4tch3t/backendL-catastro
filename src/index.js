@@ -52,6 +52,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(express.static(path.join(__dirname, 'catastro')));
+app.use(express.static(path.join(__dirname, 'comisarios')));
 app.use("/orden",express.static(path.join(__dirname, 'catastro-pdf')));
 
 https.createServer(options, app).listen(httport, ()=> {
@@ -66,12 +67,12 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'catastro', 'index.html'));
 });
 
-app.get('/predial', function (req, res) {
+app.get('/predial/', function (req, res) {
     res.sendFile(path.join(__dirname, 'catastro', 'index.html'));
 });
 
-app.get('/comisarios', function (req, res) {
-    res.sendFile(path.join(__dirname, 'catastro', 'index.html'));
+app.get('/comisarios/', function (req, res) {
+    res.sendFile(path.join(__dirname, 'comisarios', 'index.html'));
 });
 
 app.get('/orden/:u', function (req, res) {
