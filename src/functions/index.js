@@ -20,8 +20,11 @@ const setMov = require('./setMov');
 const getMov = require('./getMov');
 const regE = require('./regE');
 const scanO = require('./scanO');
+const getComisarios = require("./comisarios/getComisarios");
+const upLoadD = require("./comisarios/upLoadD");
+const addComi = require("./comisarios/addComi");
 module.exports = {
     comprobarU, regO, genFolio, saveDataL, allPadrones, padrones, getPredial, byFolio, getZone, registrarF,
     informeG, genCerti, actualizarC, obtenerOF, actualizarU, actualizarP, registrarC, getAvatar, setMov, getMov, regE,
-    scanO
+    scanO, getComisarios, upLoadD, addComi
 }

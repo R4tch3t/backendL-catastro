@@ -10,7 +10,7 @@ pdf64 = {};
 const {
     comprobarU,regO,genFolio,saveDataL,allPadrones,padrones,getPredial,byFolio,
     getZone,registrarF,informeG,genCerti,actualizarC,obtenerOF,actualizarU,actualizarP,registrarC,
-    getAvatar, setMov, getMov, regE, scanO
+    getAvatar, setMov, getMov, regE, scanO, getComisarios, upLoadD, addComi
 } = require('./functions');
 let app = express();
 let options = null;
@@ -24,14 +24,23 @@ try {
     console.log(e)
 }
 
-function setResponseHeaders(res, filename) {
+function setResponseHeaders(res, filename, d) {
     try{
-        res.header('Content-disposition', 'inline; filename=' + filename);
-        res.header('Content-type', 'application/pdf');
+        if(d){
+            res.header('Content-disposition', 'attachment; filename=' + filename);
+            //res.header('Content-type', 'application/pdf');
+        }else{
+            res.header('Content-disposition', 'inline; filename=' + filename);
+            res.header('Content-type', 'application/pdf');
+        }
     }catch(e){
         console.log(e)
     }
 }
+
+/*function setResponseHeadersD(res, filename){
+
+}*/
 
 function setResponseHeadersJSON(res) {
     res.header('Content-type', 'application/json');
@@ -95,6 +104,51 @@ app.get('/expedientes/:tp/:CTA/:escritura', function(req, res){
             fs.createReadStream(path.join(__dirname, filename)).pipe(res);
             await instance.exit();
         })();*/
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.get('/docomi/:CTA/:docN', function(req, res){
+    try {
+        var filename = "/var/comisarios/" + req.params.CTA
+        filename += "/" + req.params.docN
+            //filename = path.join(__dirname, filename)
+            // console.log(filename)
+            // file = tmpdir + filename;
+        setResponseHeaders(res, req.params.docN);
+        //fs.createReadStream(path.join(__dirname, filename)).pipe(res);
+        fs.createReadStream(filename).pipe(res);
+        
+        /*
+        //To Create in the fly pdf
+        (async function() {
+            const instance = await phantom.create();
+            const page = await instance.createPage();
+
+            await page.property('viewportSize', { width: 1024, height: 600 });
+            const status = await page.open(path.join(__dirname, filename));
+            console.log(`Page opened with status [${status}].`);
+            console.log(path.join(__dirname, filename))
+            await page.render(req.params.escritura);
+            console.log(`File created at [./stackoverflow.pdf]`);
+            fs.createReadStream(path.join(__dirname, filename)).pipe(res);
+            await instance.exit();
+        })();*/
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.get('/docomid/:CTA/:docN', function(req, res){
+    try {
+        var filename = "/var/comisarios/" + req.params.CTA
+        filename += "/" + req.params.docN
+            
+        setResponseHeaders(res, req.params.docN,true);
+        fs.createReadStream(filename).pipe(res);
 
     } catch (e) {
         console.log(e)
@@ -463,6 +517,57 @@ app.all('/scanO', (req, res) => {
             setResponseHeadersJSON(res);
 
             scanO(req,res);
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/comisarios/get', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            getComisarios(req,res);
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/comisarios/upLoadD', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            upLoadD(req,res);
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/comisarios/addComi', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            addComi(req,res);
        // })
         //res.send(filename)
 
