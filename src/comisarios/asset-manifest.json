@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.8b7e980c.chunk.css",
-    "main.js": "/static/js/main.8496ee4d.chunk.js",
-    "runtime-main.js": "/static/js/runtime-main.304bfeeb.js",
-    "static/css/2.5b4018cc.chunk.css": "/static/css/2.5b4018cc.chunk.css",
-    "static/js/2.da302c39.chunk.js": "/static/js/2.da302c39.chunk.js",
-    "index.html": "/index.html",
-    "static/js/2.da302c39.chunk.js.LICENSE.txt": "/static/js/2.da302c39.chunk.js.LICENSE.txt",
-    "static/js/main.8496ee4d.chunk.js.LICENSE.txt": "/static/js/main.8496ee4d.chunk.js.LICENSE.txt",
-    "static/media/Roboto-Bold.4f39c579.ttf": "/static/media/Roboto-Bold.4f39c579.ttf",
-    "static/media/Roboto-BoldItalic.ad2445ca.ttf": "/static/media/Roboto-BoldItalic.ad2445ca.ttf",
-    "static/media/Roboto-Italic.2a1b89d7.ttf": "/static/media/Roboto-Italic.2a1b89d7.ttf",
-    "static/media/nucleo-icons.css": "/static/media/nucleo.bd5cce8b.eot",
-    "static/media/pie.613c45c4.jpg": "/static/media/pie.613c45c4.jpg"
+    "main.css": "/comisarios/static/css/main.2867e729.chunk.css",
+    "main.js": "/comisarios/static/js/main.8496ee4d.chunk.js",
+    "runtime-main.js": "/comisarios/static/js/runtime-main.c6d96a85.js",
+    "static/css/2.5b4018cc.chunk.css": "/comisarios/static/css/2.5b4018cc.chunk.css",
+    "static/js/2.65791b35.chunk.js": "/comisarios/static/js/2.65791b35.chunk.js",
+    "index.html": "/comisarios/index.html",
+    "static/js/2.65791b35.chunk.js.LICENSE.txt": "/comisarios/static/js/2.65791b35.chunk.js.LICENSE.txt",
+    "static/js/main.8496ee4d.chunk.js.LICENSE.txt": "/comisarios/static/js/main.8496ee4d.chunk.js.LICENSE.txt",
+    "static/media/Roboto-Bold.4f39c579.ttf": "/comisarios/static/media/Roboto-Bold.4f39c579.ttf",
+    "static/media/Roboto-BoldItalic.ad2445ca.ttf": "/comisarios/static/media/Roboto-BoldItalic.ad2445ca.ttf",
+    "static/media/Roboto-Italic.2a1b89d7.ttf": "/comisarios/static/media/Roboto-Italic.2a1b89d7.ttf",
+    "static/media/nucleo-icons.css": "/comisarios/static/media/nucleo.bd5cce8b.eot",
+    "static/media/pie.613c45c4.jpg": "/comisarios/static/media/pie.613c45c4.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.304bfeeb.js",
+    "static/js/runtime-main.c6d96a85.js",
     "static/css/2.5b4018cc.chunk.css",
-    "static/js/2.da302c39.chunk.js",
-    "static/css/main.8b7e980c.chunk.css",
+    "static/js/2.65791b35.chunk.js",
+    "static/css/main.2867e729.chunk.css",
     "static/js/main.8496ee4d.chunk.js"
   ]
 }
