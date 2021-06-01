@@ -66,6 +66,14 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'catastro', 'index.html'));
 });
 
+app.get('/predial', function (req, res) {
+    res.sendFile(path.join(__dirname, 'catastro', 'index.html'));
+});
+
+app.get('/comisarios', function (req, res) {
+    res.sendFile(path.join(__dirname, 'catastro', 'index.html'));
+});
+
 app.get('/orden/:u', function (req, res) {
     const user = req.params.u; 
     switch(user){
