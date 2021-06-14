@@ -23,7 +23,7 @@ const getLength = (req, res) => {
     let inJSON = req.body
     let con = mysql.createConnection({
         host: "localhost",
-        user: process.env.NODE_MYSQL_USER,
+        user: process.env.NODE_MYSQL_USER2,
         password: process.env.NODE_MYSQL_PASS,
         database: "comisarios"
     });
@@ -121,7 +121,7 @@ const getData = (inJSON, outJSON, res, con) => {
   con.query(sql, (err, result, fields) => {
     outJSON.comisarios = [];
     let i = 0;
-    
+    if(result){
     result.forEach(e => { 
       e.FECHAN = new Date(e.FECHAN)
      /* let splitD = (e.FECHAN+"").split("GMT");
@@ -173,9 +173,11 @@ const getData = (inJSON, outJSON, res, con) => {
         documento: e.DOC,
         obs:  e.OBS
         //dateIn: new Date(e.dateIn - tzoffset).toISOString().slice(0, -1),
-      })
+      });
       i++
     });
+  }
+
     setResponse(res,outJSON,con);
   });
 }
@@ -185,7 +187,7 @@ const _getComisarios = (req, res) => {
     let outJSON = {}
     let con = mysql.createConnection({
         host: "localhost",
-        user: process.env.NODE_MYSQL_USER,
+        user: process.env.NODE_MYSQL_USER2,
         password: process.env.NODE_MYSQL_PASS,
         database: "comisarios"
     });

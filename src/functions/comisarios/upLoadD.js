@@ -35,7 +35,7 @@ analice = (res, req) => {
     let outJSON = {}
     let con = mysql.createConnection({
         host: "localhost",
-        user: process.env.NODE_MYSQL_USER,
+        user: process.env.NODE_MYSQL_USER2,
         password: process.env.NODE_MYSQL_PASS,
         database: "comisarios"
     });
@@ -169,7 +169,7 @@ registrar = (res, req) => {
     try {
     let con = mysql.createConnection({
         host: "localhost",
-        user: process.env.NODE_MYSQL_USER,
+        user: process.env.NODE_MYSQL_USER2,
         password: process.env.NODE_MYSQL_PASS,
         database: "comisarios"
     });

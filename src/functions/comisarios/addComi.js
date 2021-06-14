@@ -133,7 +133,7 @@ const _addComi = (req, res) => {
     const {bandEdit} = inJSON
     let con = mysql.createConnection({
         host: "localhost",
-        user: process.env.NODE_MYSQL_USER,
+        user: process.env.NODE_MYSQL_USER2,
         password: process.env.NODE_MYSQL_PASS,
         database: "comisarios"
     });
