@@ -182,6 +182,43 @@ const getData = (inJSON, outJSON, res, con) => {
   });
 }
 
+const getFiles = (inJSON, outJSON, res, con) => {
+  const {comi, tipoB} = inJSON
+  let subqueryB = ''
+
+  if (comi !== '') {
+    if (tipoB === 0) {
+      subqueryB = `WHERE f.NP=${comi?comi:0}`
+    }
+    if (tipoB === 1) {
+      subqueryB = `WHERE f.nombre LIKE '%${comi}%'`
+    }
+  }
+
+  let sql = `SELECT * FROM documentos f ${subqueryB} WHERE f.NP=${inJSON.CTA} ORDER by f.idDoc ASC`
+  console.log(sql)
+  con.query(sql, (err, result, fields) => {
+    outJSON.documentos = [];
+    let i = 0;
+    if(result){
+    result.forEach(e => { 
+      
+      outJSON.documentos.push({
+        key: e.idDoc,
+        CTA: inJSON.CTA,
+        nombre: e.nombre,
+        descripcion: e.descripcion,
+      });
+
+      i++
+
+    });
+  }
+
+    setResponse(res,outJSON,con);
+  });
+}
+
 const _getComisarios = (req, res) => {
     const inJSON = req.body
     let outJSON = {}
@@ -207,8 +244,12 @@ const _getComisarios = (req, res) => {
             });
           }else{*/
             //process.env.TZ = "America/Mexico_City"
-            
-            getData(inJSON, outJSON, res, con);
+            const {opG} = inJSON
+            if(opG==="file"){
+              getFiles(inJSON, outJSON, res, con);
+            }else{
+              getData(inJSON, outJSON, res, con);
+            }
           //}
           //console.log("Connected!");
 

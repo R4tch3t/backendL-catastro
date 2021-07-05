@@ -60,17 +60,17 @@ sleep = (milliseconds) => {
     getLength=async (pdfImage,inJSON)=>{
          let bandL = true
          let bandL2 = false
-         pdf64.stackAna[inJSON.CTA] = []
+         pdf64.stackAna[inJSON.uuid] = []
        //  console.log('getLength')
          while(bandL){
         try{
             await sleep(100)
             if(!bandL2){
                 bandL2=true
-            pdfImage.convertPage(lengthP[inJSON.CTA]).then((imagePath) => {
-                pdf64.stackAna[inJSON.CTA].push(imagePath);
+            pdfImage.convertPage(lengthP[inJSON.uuid]).then((imagePath) => {
+                pdf64.stackAna[inJSON.uuid].push(imagePath);
               //  console.log(imagePath)
-                lengthP[inJSON.CTA]++;
+                lengthP[inJSON.uuid]++;
                 bandL2=false
             }).catch(e=>{
                 //console.log(e)
@@ -153,10 +153,10 @@ sleep = (milliseconds) => {
                     outJSON.analize = 1
                     outJSON.p="- ANALISIS COMPLETADO - 100 %"
 
-                    pdf64[inJSON.CTA] = '';
-                    currentCTA = undefined;
-                    lengthP[inJSON.CTA]=undefined
-                    countT[inJSON.CTA]={}
+                    pdf64[inJSON.uuid] = '';
+                    currentUUID = undefined;
+                    lengthP[inJSON.uuid]=undefined
+                    countT[inJSON.uuid]={}
                     setResponse(res, outJSON,con);
                /* });
             }*/
@@ -175,76 +175,77 @@ registrar = (res, req) => {
     });
     const inJSON = req.body
     let outJSON = {}
-                con.connect((err) => {
-                    outJSON.error = {};
-                    if (err) {
-                        console.log(`Error: ${err}`);
-                        setResponse(res, outJSON,con)
-                    } else {
-                        if (pdf64[inJSON.CTA] === undefined) {
-                            pdf64[inJSON.CTA] = inJSON.dataPart
+    con.connect((err) => {
+        outJSON.error = {};
+        if (err) {
+            console.log(`Error: ${err}`);
+            setResponse(res, outJSON,con)
+        } else {
+            if (pdf64[inJSON.uuid] === undefined) {
+                pdf64[inJSON.uuid] = inJSON.dataPart
 
-                        } else {
-                            pdf64[inJSON.CTA] += inJSON.dataPart
-                        }
-                        
-                        if (inJSON.count < inJSON.lengthE) {
-                            outJSON.next = 1
-                            setResponse(res, outJSON,con);
-                        } else {
-                            inJSON.CTA = parseInt(inJSON.CTA)
-                            pdf64[inJSON.CTA] = pdf64[inJSON.CTA].split('base64,')[1]
-                            if (pdf64[inJSON.CTA]) {
-                                let subPath = "/var/comisarios/" + (inJSON.tp?inJSON.tp + "/" : '') + inJSON.CTA
-                                if (!fs.existsSync(subPath)) {
-                                    fs.mkdirSync(subPath, { recursive: true });
-                                } 
-                                subPath += "/" + inJSON.fileName
-                                let decodedBase64 = base64.base64Decode(pdf64[inJSON.CTA], subPath);
-
-                                let sql = `UPDATE padron SET doc='${inJSON.fileName}' `
-                                sql += ` WHERE NP=${inJSON.CTA}`
-                                    //console.log(sql)
-                                con.query(sql, (err, result, fields) => {
-                                    outJSON.next = 0
-                                    pdf64[inJSON.CTA] = '';
-                                    currentCTA = undefined;
-                                    countT[inJSON.CTA]={}
-                                    setResponse(res, outJSON,con);
-                                });
-                            }
-                        }
-
-                    }
-
-                });
-            } catch (e) {
-                console.log(e)
+            } else {
+                pdf64[inJSON.uuid] += inJSON.dataPart
             }
+            
+            if (inJSON.count < inJSON.lengthE) {
+                outJSON.next = 1
+                setResponse(res, outJSON,con);
+            } else {
+                //  inJSON.CTA = parseInt(inJSON.CTA)
+                pdf64[inJSON.uuid] = pdf64[inJSON.uuid].split('base64,')[1]
+                if (pdf64[inJSON.uuid]) {
+                    let subPath = "/var/comisarios/" + (inJSON.tp?inJSON.tp + "/" : '') + inJSON.CTA
+                    if (!fs.existsSync(subPath)) {
+                        fs.mkdirSync(subPath, { recursive: true });
+                    } 
+                    subPath += "/" + inJSON.fileName
+                    let decodedBase64 = base64.base64Decode(pdf64[inJSON.uuid], subPath);
+
+                    let sql = `INSERT INTO documentos(NP, nombre, descripcion) VALUES (${inJSON.CTA},'${inJSON.fileName}','${inJSON.descripcion}') `;
+                    //sql += ` WHERE NP=${inJSON.uuid}`
+                        //console.log(sql)
+                    con.query(sql, (err, result, fields) => {
+                        outJSON.next = 0;
+                        outJSON.idDoc=result.insertId;
+                        pdf64[inJSON.uuid] = '';
+                        currentUUID = undefined;
+                        countT[inJSON.uuid]={}
+                        setResponse(res, outJSON,con);
+                    });
+                }
+            }
+
+        }
+
+    });
+} catch (e) {
+    console.log(e)
+}
 }
 
 
 const upLoadD = (req, res) => {
         try {
             //req.body.CTA = Math.random()
-            const {CTA,analize,count} = req.body;
+            const {uuid,analize,count} = req.body;
             const outJSON = {}
            // console.log(req)
-            if (CTA) {
+            if (uuid) {
 
                 if (!analize) {
                     //if (currentCTA === undefined || currentCTA === CTA) {
                         /*if(!countT[CTA]){
                             countT[CTA].count=count
                         }else{*/
-                            if(!countT[CTA]||countT[CTA].count>count){
-                                countT[CTA]={count: 0}
+                            if(!countT[uuid]||countT[uuid].count>count){
+                                countT[uuid]={count: 0}
                             }
                             //if()
-                            if(!countT[CTA].count||countT[CTA].count<count){
+                            if(!countT[uuid].count||countT[uuid].count<count){
                                 //countT[CTA]={}
-                                countT[CTA].count=count
-                                currentCTA = CTA
+                                countT[uuid].count=count
+                                currentUUID = uuid
                                 registrar(res, req);
                             }/*else{
                                 outJSON.nextNode = 1

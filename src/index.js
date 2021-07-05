@@ -10,7 +10,7 @@ pdf64 = {};
 const {
     comprobarU,regO,genFolio,saveDataL,allPadrones,padrones,getPredial,byFolio,
     getZone,registrarF,informeG,genCerti,actualizarC,obtenerOF,actualizarU,actualizarP,registrarC,
-    getAvatar, setMov, getMov, regE, scanO, getComisarios, upLoadD, addComi
+    getAvatar, setMov, getMov, regE, scanO, getComisarios, upLoadD, addComi, editFile, entregaRecepcion
 } = require('./functions');
 let app = express();
 let options = null;
@@ -146,6 +146,21 @@ app.get('/docomi/:CTA/:docN', function(req, res){
             fs.createReadStream(path.join(__dirname, filename)).pipe(res);
             await instance.exit();
         })();*/
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.get('/download/:filename', function(req, res){
+    try {
+        var filename = "/var/padron/" + req.params.filename
+            //filename = path.join(__dirname, filename)
+            // console.log(filename)
+            // file = tmpdir + filename;
+        setResponseHeaders(res, req.params.filename, true);
+        fs.createReadStream(filename).pipe(res);
+        
 
     } catch (e) {
         console.log(e)
@@ -340,6 +355,23 @@ app.all('/informeG', (req, res) => {
             setResponseHeadersJSON(res);
 
             informeG(req,res)
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/entregaRecepcion', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            entregaRecepcion(req,res)
        // })
         //res.send(filename)
 
@@ -578,6 +610,23 @@ app.all('/comisarios/addComi', (req, res) => {
             setResponseHeadersJSON(res);
 
             addComi(req,res);
+       // })
+        //res.send(filename)
+
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.all('/comisarios/editFile', (req, res) => {
+    try {
+
+        //console.log(res)
+        //let filename = ["Acceso.js"]
+       //import('./comprobarU.js').then(({comprobarU})=>{
+            setResponseHeadersJSON(res);
+
+            editFile(req,res);
        // })
         //res.send(filename)
 
