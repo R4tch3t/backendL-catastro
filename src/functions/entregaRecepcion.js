@@ -267,7 +267,7 @@ const buildPadron = (inJSON, outJSON, con, res)=>{
                     ]
                 });
                 worksheet.addConditionalFormatting({
-                    ref: `O${rowCount+4}:O${rowCount+1}`,
+                    ref: `O${rowCount+1}:O${rowCount+4}`,
                     rules: [
                     {
                         type: 'expression',
@@ -1181,7 +1181,7 @@ const buildRezago = (inJSON, outJSON, con, res)=>{
                     ]
                 });
                 worksheet.addConditionalFormatting({
-                    ref: `O${rowCount+4}:O${rowCount+1}`,
+                    ref: `O${rowCount+1}:O${rowCount+4}`,
                     rules: [
                     {
                         type: 'expression',
@@ -1791,15 +1791,15 @@ const buildRezago = (inJSON, outJSON, con, res)=>{
 }
 
 const genExcel = (req, res) => {
-    let outJSON = {}
-    let inJSON = req.body
-    let con = mysql.createConnection({
-        host: "localhost",
-        user: process.env.NODE_MYSQL_USER,
-        password: process.env.NODE_MYSQL_PASS,
-        database: "dbcatastro"
-    });
-    try{
+let outJSON = {}
+let inJSON = req.body
+let con = mysql.createConnection({
+    host: "localhost",
+    user: process.env.NODE_MYSQL_USER,
+    password: process.env.NODE_MYSQL_PASS,
+    database: "dbcatastro"
+});
+try{
     con.connect( (err) => {
         
         buildPadron(inJSON, outJSON, con, res);
